@@ -1,0 +1,169 @@
+/* ---------- VARIABLES ---------- */
+:root {
+  --bg-main: #ffffff;
+  --bg-section: #f8f6fa;
+  --border: #e0e0e8;
+  --text-main: #1f1f1f;
+  --text-muted: #6b6b6b;
+  --accent-waiting: #ffb547;
+  --accent-ready: #63c74d;
+  --accent-delivered: #631da3;
+  --search-bg: #f0f0f5;
+  --search-border: #ccc;
+  --search-text: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-main: #151518;
+    --bg-section: #1c1c22;
+    --border: #2a2a33;
+    --text-main: #f1f1f1;
+    --text-muted: #a1a1aa;
+    --accent-waiting: #ffca6f;
+    --accent-ready: #8be57d;
+    --accent-delivered: #b98cff;
+    --search-bg: #2a2a33;
+    --search-border: #555;
+    --search-text: #f1f1f1;
+  }
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+.mainContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* ---------- SEARCH BAR ---------- */
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background: var(--bg-section);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.searchTitle h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text-main);
+}
+
+.searchComponents {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.searchComponents p {
+  margin: 0;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--search-border);
+  background: var(--search-bg);
+  color: var(--search-text);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+}
+
+.searchComponents svg {
+  font-size: 1.1rem;
+  color: var(--accent-delivered);
+  cursor: pointer;
+}
+
+/* ---------- STATUS SECTIONS CONTAINER ---------- */
+.statusSections {
+  display: flex;
+  flex-direction: row; /* three sections side by side */
+  gap: 1rem;
+}
+
+/* ---------- STATUS SECTIONS ---------- */
+.waitingContainer,
+.readyContainer,
+.deliveredContainer {
+  flex: 1; /* equal width for all three columns */
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-section);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* ---------- SECTION HEADERS ---------- */
+.headerWaiting h4,
+.headerReady h4,
+.headerDelivered h4 {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.headerWaiting { background-color: var(--accent-waiting); }
+.headerReady { background-color: var(--accent-ready); }
+.headerDelivered { background-color: var(--accent-delivered); }
+
+/* ---------- ORDERS CONTAINERS ---------- */
+.waitingOrdersContainer,
+.readyOrdersContainer,
+.deliveredOrdersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+}
+
+/* ---------- MOBILE RESPONSIVENESS ---------- */
+@media (max-width: 900px) {
+  .statusSections {
+    flex-direction: column; /* stack columns vertically on tablet/mobile */
+  }
+  .mainContainer {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .searchComponents {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .searchComponents svg {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 600px) {
+  .mainContainer {
+    padding: 0.8rem;
+    gap: 0.8rem;
+  }
+  .searchTitle h3 {
+    font-size: 1rem;
+  }
+  .searchInput {
+    font-size: 0.9rem;
+  }
+}

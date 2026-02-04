@@ -1,0 +1,122 @@
+/* ---------- CSS VARIABLES (light / dark) ---------- */
+:root {
+  --bg-main: #ffffff;
+  --bg-row: #f9f9fb;
+  --border: #e3e3e8;
+  --text-main: #1f1f1f;
+  --text-muted: #6b6b6b;
+  --accent: #631da3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-main: #151518;
+    --bg-row: #1d1d22;
+    --border: #2a2a33;
+    --text-main: #f1f1f1;
+    --text-muted: #a1a1aa;
+    --accent: #b98cff;
+  }
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+.mainContainer {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- TITLE ---------- */
+.titleContainer {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    rgba(99, 29, 163, 0.85)
+  );
+}
+
+.titleContainer h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* ---------- ORDERS LIST ---------- */
+.lateOrders {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- ORDER ROW ---------- */
+.orderCard {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 0.25rem 1rem;
+
+  padding: 0.9rem 1.25rem;
+  background: var(--bg-row);
+  border-top: 1px solid var(--border);
+}
+
+.orderCard:first-child {
+  border-top: none;
+}
+
+/* ---------- TEXT STYLES ---------- */
+.orderCard p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.orderCard p:first-child {
+  font-weight: 600;
+  grid-column: 1 / 2;
+}
+
+.orderCard p:nth-child(2) {
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 600;
+  align-self: start;
+}
+
+.orderCard p:last-child {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ---------- HOVER ---------- */
+.orderCard:hover {
+  background: color-mix(in srgb, var(--bg-row) 85%, var(--accent) 15%);
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 600px) {
+  .titleContainer {
+    padding: 0.85rem 1rem;
+  }
+
+  .titleContainer h3 {
+    font-size: 0.95rem;
+  }
+
+  .orderCard {
+    padding: 0.75rem 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  .orderCard p:nth-child(2) {
+    font-size: 0.7rem;
+  }
+}

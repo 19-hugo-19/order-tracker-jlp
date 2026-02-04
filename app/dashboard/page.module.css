@@ -1,0 +1,49 @@
+/* ---------- VARIABLES ---------- */
+:root {
+  --bg-page: #f7f4fb;
+  --bg-gradient-start: #f7f4fb;
+  --bg-gradient-end: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #151518;
+    --bg-gradient-start: #151518;
+    --bg-gradient-end: #1a1a1f;
+  }
+}
+
+/* ---------- DASHBOARD PAGE ---------- */
+.dashboardPage {
+  min-height: 100vh;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem; /* spacing between components */
+  box-sizing: border-box;
+
+  /* background gradient with dark mode support */
+  background: linear-gradient(
+    180deg,
+    var(--bg-gradient-start) 0%,
+    var(--bg-gradient-end) 100%
+  );
+}
+
+/* ---------- RESPONSIVENESS ---------- */
+@media (max-width: 900px) {
+  .dashboardPage {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboardPage {
+    padding: 0.8rem;
+    gap: 1rem;
+  }
+}
