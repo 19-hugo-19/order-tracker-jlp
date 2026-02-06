@@ -1,52 +1,45 @@
-/* ---------- MAIN CARD ---------- */
 .mainContainer {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 0.8fr;
+  padding: 0.6rem 1rem;
+  font-size: 0.82rem;
+  border-bottom: 1px solid var(--border);
   align-items: center;
-  padding: 0.6rem 0.8rem;
-  background: var(--bg-main);
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  font-size: 0.9rem;
-  color: var(--text-main);
+}
+
+.mainContainer:last-child {
+  border-bottom: none;
 }
 
 .mainContainer:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.03);
 }
 
-/* ---------- TEXT ITEMS ---------- */
 .mainContainer p {
   margin: 0;
-  flex: 1;
-  text-align: left;
-  overflow-wrap: anywhere;
-  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mainContainer p:nth-child(2) {
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .mainContainer p:last-child {
   text-align: right;
   color: var(--text-muted);
-  font-size: 0.8rem;
 }
 
-/* ---------- MOBILE ---------- */
+/* Mobile */
 @media (max-width: 600px) {
   .mainContainer {
-    flex-direction: column;
-    align-items: flex-start;
+    grid-template-columns: 1fr;
     gap: 0.25rem;
   }
 
-  .mainContainer p:nth-child(2),
-  .mainContainer p:last-child {
-    text-align: left;
+  .mainContainer p {
+    text-align: left !important;
   }
 }

@@ -38,7 +38,7 @@ export default function StatusComponent() {
             </div>
             <div className={styles.statusSections}>
                 <div className={styles.waitingContainer}>
-                    <div className={styles.headerWaiting}>
+                    <div className={`${styles.headerWaiting} ${styles.header}`}>
                         <h4>En attente de produits</h4>
                     </div>
                     <div className={styles.waitingOrdersContainer}>
@@ -52,7 +52,7 @@ export default function StatusComponent() {
                     </div>
                 </div>
                 <div className={styles.readyContainer}>
-                    <div className={styles.headerReady}>
+                    <div className={`${styles.headerReady} ${styles.header}`}>
                         <h4>Prêtes à livrer</h4>
                     </div>
                     <div className={styles.readyOrdersContainer}>
@@ -66,7 +66,7 @@ export default function StatusComponent() {
                     </div>
                 </div>
                 <div className={styles.deliveredContainer}>
-                    <div className={styles.headerDelivered}>
+                    <div className={`${styles.headerDelivered} ${styles.header}`}>
                         <h4>Livrées</h4>
                     </div>
                     <div className={styles.deliveredOrdersContainer}>

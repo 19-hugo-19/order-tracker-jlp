@@ -1,60 +1,63 @@
-/* ---------- VARIABLES ---------- */
+/* =========================================================
+   DESIGN TOKENS
+   ========================================================= */
 :root {
   --bg-main: #ffffff;
-  --bg-section: #f8f6fa;
-  --border: #e0e0e8;
-  --text-main: #1f1f1f;
-  --text-muted: #6b6b6b;
-  --accent-waiting: #ffb547;
-  --accent-ready: #63c74d;
-  --accent-delivered: #631da3;
-  --search-bg: #f0f0f5;
-  --search-border: #ccc;
-  --search-text: #333;
+  --bg-board: #f5f6fa;
+  --border: #d9dbe7;
+
+  --text-main: #1e1f26;
+  --text-muted: #6b7280;
+
+  --waiting: #f5b14c;
+  --ready: #4fa86b;
+  --delivered: #631da3;
+
+  --header-text: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-main: #151518;
-    --bg-section: #1c1c22;
-    --border: #2a2a33;
-    --text-main: #f1f1f1;
-    --text-muted: #a1a1aa;
-    --accent-waiting: #ffca6f;
-    --accent-ready: #8be57d;
-    --accent-delivered: #b98cff;
-    --search-bg: #2a2a33;
-    --search-border: #555;
-    --search-text: #f1f1f1;
+    --bg-main: #1c1d23;
+    --bg-board: #14151a;
+    --border: #2a2b33;
+
+    --text-main: #e5e7eb;
+    --text-muted: #9ca3af;
   }
 }
 
-/* ---------- MAIN CONTAINER ---------- */
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
 .mainContainer {
-  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  padding: 1.25rem;
+  background: var(--bg-board);
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  box-sizing: border-box;
+  gap: 1.25rem;
 }
 
-/* ---------- SEARCH BAR ---------- */
+/* =========================================================
+   SEARCH BAR
+   ========================================================= */
 .searchContainer {
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  background: var(--bg-section);
-  padding: 1rem;
-  border-radius: 12px;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-main);
   border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
 }
 
 .searchTitle h3 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
   color: var(--text-main);
 }
 
@@ -62,108 +65,204 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
 }
 
 .searchComponents p {
   margin: 0;
-  font-weight: 500;
-  color: var(--text-main);
-}
-
-.searchInput {
-  flex: 1;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  border: 1px solid var(--search-border);
-  background: var(--search-bg);
-  color: var(--search-text);
-  font-size: 0.95rem;
-  outline: none;
-}
-
-.searchInput::placeholder {
+  font-size: 0.8rem;
   color: var(--text-muted);
 }
 
-.searchComponents svg {
-  font-size: 1.1rem;
-  color: var(--accent-delivered);
-  cursor: pointer;
+.searchInput {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-size: 0.85rem;
 }
 
-/* ---------- STATUS SECTIONS CONTAINER ---------- */
+/* =========================================================
+   STATUS BOARD
+   ========================================================= */
 .statusSections {
-  display: flex;
-  flex-direction: row; /* three sections side by side */
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+  isolation: isolate;
 }
 
-/* ---------- STATUS SECTIONS ---------- */
+/* =========================================================
+   COLUMNS
+   ========================================================= */
 .waitingContainer,
 .readyContainer,
 .deliveredContainer {
-  flex: 1; /* equal width for all three columns */
+  background: var(--bg-main);
   display: flex;
   flex-direction: column;
-  background: var(--bg-section);
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  overflow: hidden;
+  position: relative;
+  overflow: visible;
 }
 
-/* ---------- SECTION HEADERS ---------- */
+/* Column borders */
+.waitingContainer {
+  border: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  z-index: 3;
+}
+
+.readyContainer {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-left: none;
+  z-index: 2;
+}
+
+.deliveredContainer {
+  border: 1px solid var(--border);
+  border-left: none;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  z-index: 1;
+}
+
+/* =========================================================
+   ARROW HEADERS
+   ========================================================= */
+.headerWaiting,
+.headerReady,
+.headerDelivered {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--header-text);
+}
+
+/* Header colors */
+.headerWaiting { 
+  background: var(--waiting);
+  border-top-left-radius: 9px;
+}
+
+.headerReady { 
+  background: var(--ready);
+}
+
+.headerDelivered { 
+  background: var(--delivered);
+  border-top-right-radius: 9px;
+}
+
+/* Right-pointing arrow using clip-path */
+.headerWaiting::after,
+.headerReady::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: -32px;
+  width: 33px;
+  height: calc(100%);
+  background: inherit;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  z-index: 10;
+}
+
+/* Arrow border effect */
+.headerWaiting::before,
+.headerReady::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: -32px;
+  width: 33px;
+  height: calc(100%);
+  background: var(--border);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  z-index: 9;
+}
+
+/* Bottom separator line */
+.headerWaiting,
+.headerReady,
+.headerDelivered {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .headerWaiting,
+  .headerReady,
+  .headerDelivered {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
 .headerWaiting h4,
 .headerReady h4,
 .headerDelivered h4 {
   margin: 0;
-  padding: 0.8rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: white;
+  white-space: nowrap;
 }
 
-.headerWaiting { background-color: var(--accent-waiting); }
-.headerReady { background-color: var(--accent-ready); }
-.headerDelivered { background-color: var(--accent-delivered); }
-
-/* ---------- ORDERS CONTAINERS ---------- */
+/* =========================================================
+   ORDERS LIST
+   ========================================================= */
 .waitingOrdersContainer,
 .readyOrdersContainer,
 .deliveredOrdersContainer {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.8rem 1rem;
+  gap: 0.75rem;
+  padding: 1rem;
 }
 
-/* ---------- MOBILE RESPONSIVENESS ---------- */
+/* =========================================================
+   MOBILE RESPONSIVE
+   ========================================================= */
 @media (max-width: 900px) {
   .statusSections {
-    flex-direction: column; /* stack columns vertically on tablet/mobile */
-  }
-  .mainContainer {
-    padding: 1rem;
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
-  .searchComponents {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .searchComponents svg {
-    align-self: flex-end;
-  }
-}
 
-@media (max-width: 600px) {
-  .mainContainer {
-    padding: 0.8rem;
-    gap: 0.8rem;
+  /* Remove arrows on mobile */
+  .headerWaiting::after,
+  .headerReady::after,
+  .headerWaiting::before,
+  .headerReady::before {
+    display: none;
   }
-  .searchTitle h3 {
-    font-size: 1rem;
+
+  /* Reset column borders */
+  .waitingContainer,
+  .readyContainer,
+  .deliveredContainer {
+    border: 1px solid var(--border);
+    border-radius: 10px;
   }
-  .searchInput {
-    font-size: 0.9rem;
+
+  /* Reset header border radius */
+  .headerWaiting { 
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+  }
+
+  .headerReady { 
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+  }
+
+  .headerDelivered { 
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
   }
 }
