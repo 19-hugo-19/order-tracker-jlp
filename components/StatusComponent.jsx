@@ -5,6 +5,7 @@ import styles from "./StatusComponent.module.css"
 import StatusComponentOrder from "./StatusComponentOrder"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
+import NewOrderBtn from "./NewOrderBtn"
 
 export default function StatusComponent() {
     const defaultOrder = {
@@ -34,6 +35,9 @@ export default function StatusComponent() {
                         onChange={(e) => setSearchValue(e.target.value)}
                     />
                     <FontAwesomeIcon icon={faMagnifyingGlass}/>
+                </div>
+                <div className={styles.newOrder}>
+                    <NewOrderBtn/>
                 </div>
             </div>
             <div className={styles.statusSections}>
