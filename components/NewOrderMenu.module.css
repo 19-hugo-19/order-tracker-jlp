@@ -402,3 +402,82 @@
     font-size: 1.2rem;
   }
 }
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.buttonsSection {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* Base button styles */
+.cancelButton,
+.saveButton {
+  height: 46px;
+  padding: 0 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* -------------------------
+   CANCEL BUTTON
+   ------------------------- */
+
+.cancelButton {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.cancelButton:hover {
+  background: rgba(100, 116, 139, 0.08);
+  color: var(--text-main);
+}
+
+.cancelButton:active {
+  transform: translateY(1px);
+}
+
+/* -------------------------
+   SAVE BUTTON (PRIMARY)
+   ------------------------- */
+
+.saveButton {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(99, 52, 147, 0.35);
+}
+
+.saveButton:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(99, 52, 147, 0.45);
+}
+
+.saveButton:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(99, 52, 147, 0.35);
+}
+
+@media (max-width: 768px) {
+  .buttonsSection {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+  }
+}

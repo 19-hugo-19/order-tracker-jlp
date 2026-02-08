@@ -1,24 +1,69 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./StatusComponent.module.css"
 import StatusComponentOrder from "./StatusComponentOrder"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import NewOrderBtn from "./NewOrderBtn"
+import { auth } from "@/lib/firebase"
+import { listenToComOrders } from "@/lib/comOrder"
+import { onAuthStateChanged } from "firebase/auth"
 
-export default function StatusComponent() {
-    const defaultOrder = {
-        company:"Gestionnaire de la Capitale",
-        nbProducts:12,
-        status:"Prêt à livrer",
-        creationDate:"12 déc."
-    }
-    const [waitingOrders, setWaitingOrders] = useState([defaultOrder, defaultOrder])
-    const [readyOrders, setReadyOrders] = useState([defaultOrder, defaultOrder])
-    const [deliveredOrders, setDeliveredOrders] = useState([defaultOrder, defaultOrder])
+export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderClick }) {
+    const [waitingOrders, setWaitingOrders] = useState([])
+    const [readyOrders, setReadyOrders] = useState([])
+    const [deliveredOrders, setDeliveredOrders] = useState([])
     const [searchValue, setSearchValue] = useState("")
+    
+    const filterOrders = (orders) => {
+        let tempWaiting = []
+        let tempReady = []
+        let tempDelivered = []
+        orders.forEach(order => {
+            switch(order.status){
+                case "waiting":
+                    tempWaiting.push(order)
+                    break
+                case "ready":
+                    tempReady.push(order)
+                    break
+                case "delivered":
+                    tempDelivered.push(order)
+                    break  
+                default:
+                    tempWaiting.push(order)
+                    break
+            }
+        });
+        setWaitingOrders(tempWaiting)
+        setReadyOrders(tempReady)
+        setDeliveredOrders(tempDelivered)
+    }
 
+    useEffect(() => {
+    let unsubscribeOrders = null
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            if (unsubscribeOrders) {
+                unsubscribeOrders()
+                unsubscribeOrders = null
+            }
+            return
+        }
+
+        if (unsubscribeOrders) unsubscribeOrders()
+
+        unsubscribeOrders = listenToComOrders(user.uid, (orders) => {
+        filterOrders(orders)
+        })
+    })
+
+    return () => {
+        unsubscribeAuth()
+        if (unsubscribeOrders) unsubscribeOrders()
+    }
+    }, [])
 
     return(
         <div className={styles.mainContainer}>
@@ -37,7 +82,7 @@ export default function StatusComponent() {
                     <FontAwesomeIcon icon={faMagnifyingGlass}/>
                 </div>
                 <div className={styles.newOrder}>
-                    <NewOrderBtn/>
+                    <NewOrderBtn clickFct={handleOpenNewOrderMenu}/>
                 </div>
             </div>
             <div className={styles.statusSections}>
@@ -49,7 +94,7 @@ export default function StatusComponent() {
                         {
                         waitingOrders.map((order, ind) => {
                             return (
-                                <StatusComponentOrder key={ind} orderObj={order}/>
+                                <StatusComponentOrder key={order.id} orderObj={order} handleClick={handleOrderClick}/>
                             )
                         })
                         }
@@ -63,7 +108,7 @@ export default function StatusComponent() {
                         {
                         readyOrders.map((order, ind) => {
                             return (
-                                <StatusComponentOrder key={ind} orderObj={order}/>
+                                <StatusComponentOrder key={order.id} orderObj={order} handleClick={handleOrderClick}/>
                             )
                         })
                         }
@@ -77,7 +122,7 @@ export default function StatusComponent() {
                         {
                         deliveredOrders.map((order, ind) => {
                             return (
-                                <StatusComponentOrder key={ind} orderObj={order}/>
+                                <StatusComponentOrder key={order.id} orderObj={order} handleClick={handleOrderClick}/>
                             )
                         })
                         }

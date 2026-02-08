@@ -1,18 +1,18 @@
 'use client'
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import styles from "./NewOrderMenu.module.css"
 
-export default function NewOrderMenu() {
+export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, startingOrderObj }) {
 
-    const [contactName, setContactName] = useState("")
-    const [companyName, setCompanyName] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
-    const [email, setEmail] = useState("")
-    const [deliveringInfo, setDeliveringInfo] = useState("")
+    const [contactName, setContactName] = useState(startingOrderObj.contactName)
+    const [companyName, setCompanyName] = useState(startingOrderObj.companyName)
+    const [phoneNumber, setPhoneNumber] = useState(startingOrderObj.phoneNumber)
+    const [email, setEmail] = useState(startingOrderObj.email)
+    const [deliveringInfo, setDeliveringInfo] = useState(startingOrderObj.deliveringInfo)
 
-    // order obj layout
-    // order = [
+    // orderProducts obj layout
+    // orderProducts = [
     //     {
     //         productName:"value"
     //         qty:number
@@ -32,9 +32,11 @@ export default function NewOrderMenu() {
         qty:""
     }
     const [tempProduct, setTempProduct] = useState(defaultTempProduct)
-    const [order, setOrder] = useState([])
-    const [notes, setNotes] = useState("")
-    const [employee, setEmployee] = useState("")
+    const [orderProducts, setOrderProducts] = useState(startingOrderObj.orderProducts)
+    const [notes, setNotes] = useState(startingOrderObj.notes)
+    const [employee, setEmployee] = useState(startingOrderObj.employee)
+
+    const newProductRef = useRef(null)
 
     const handleLoadCustomer = () => {
 
@@ -42,15 +44,15 @@ export default function NewOrderMenu() {
 
     return (
         <div className={styles.menu}>
-            <div className={styles.darkBackground}/>
+            <div className={styles.darkBackground} onClick={handleCloseMenu}/>
             <div className={styles.mainContainer}>
                 <div className={styles.customerSection}>
                     <div className={styles.customerSectionTitle}>
                         <h3>Infos Clients</h3>
                         <div className={styles.sub1RightSection}>
-                            <btn className={styles.loadCustomer} onClick={handleLoadCustomer}>
+                            <button className={styles.loadCustomer} onClick={handleLoadCustomer}>
                                 Charger client
-                            </btn>
+                            </button>
                         </div>
                     </div>
                     <div className={styles.customerInfoSection}>
@@ -63,6 +65,7 @@ export default function NewOrderMenu() {
                                         placeholder={"Nom"}
                                         value={contactName}
                                         onChange={(e) => setContactName(e.target.value)}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -72,6 +75,7 @@ export default function NewOrderMenu() {
                                         placeholder={"Compagnie"}
                                         value={companyName}
                                         onChange={(e) => setCompanyName(e.target.value)}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -81,6 +85,7 @@ export default function NewOrderMenu() {
                                         placeholder={"Téléphone"}
                                         value={phoneNumber}
                                         onChange={(e) => setPhoneNumber(e.target.value)}
+                                        disabled={!editMode}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -90,6 +95,7 @@ export default function NewOrderMenu() {
                                         placeholder={"Email"}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        disabled={!editMode}
                                     />
                                 </div>
                             </div>
@@ -102,6 +108,7 @@ export default function NewOrderMenu() {
                                     placeholder={"Informations de livraison"}
                                     value={deliveringInfo}
                                     onChange={(e) => setDeliveringInfo(e.target.value)}
+                                    disabled={!editMode}
                                 />
                             </div>
                         </div>
@@ -118,7 +125,7 @@ export default function NewOrderMenu() {
                                 <p>Qté</p>
                             </div>
                             <div className={styles.orderFields}>
-                                {order.map((product, ind) => {
+                                {orderProducts.map((product, ind) => {
                                     return (
                                         <div key={ind} className={styles.productRow}>
                                             <input
@@ -126,26 +133,28 @@ export default function NewOrderMenu() {
                                                 placeholder={"Nom et/ou numéro de produit"}
                                                 value={product.productName}
                                                 onChange={(e) => {
-                                                    const newOrder = [...order]
+                                                    const newOrder = [...orderProducts]
                                                     newOrder[ind] = {
                                                         ...newOrder[ind],
                                                         productName: e.target.value
                                                     }
-                                                    setOrder(newOrder)
+                                                    setOrderProducts(newOrder)
                                                 }}
+                                                disabled={!editMode}
                                             />
                                             <input
                                                 className={styles.qtyInput}
                                                 placeholder={"Quantité"}
                                                 value={product.qty}
                                                 onChange={(e) => {
-                                                    const newOrder = [...order]
+                                                    const newOrder = [...orderProducts]
                                                     newOrder[ind] = {
                                                         ...newOrder[ind],
                                                         qty: e.target.value
                                                     }
-                                                    setOrder(newOrder)
+                                                    setOrderProducts(newOrder)
                                                 }}
+                                                disabled={!editMode}
                                             />
                                         </div>
                                     )
@@ -153,6 +162,7 @@ export default function NewOrderMenu() {
                                 {/* New line to add products */}
                                 <div className={styles.productRow}>
                                     <input
+                                        ref={newProductRef}
                                         className={styles.productInput}
                                         placeholder={"Nom et/ou numéro de produit"}
                                         value={tempProduct.productName}
@@ -162,10 +172,7 @@ export default function NewOrderMenu() {
                                                 productName:e.target.value
                                             })
                                         }}
-                                        onBlur={() => {
-                                            setOrder([...order, tempProduct])
-                                            setTempProduct(defaultTempProduct)
-                                        }}
+                                        disabled={!editMode}
                                     />
                                     <input
                                         className={styles.qtyInput}
@@ -177,6 +184,22 @@ export default function NewOrderMenu() {
                                                 qty:e.target.value
                                             })
                                         }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Tab" || e.key === "Enter") {
+                                            e.preventDefault()
+
+                                            if (!tempProduct.productName) return
+
+                                            setOrderProducts(prev => [...prev, tempProduct])
+                                            setTempProduct(defaultTempProduct)
+
+                                            // Wait for React to render the new row
+                                            setTimeout(() => {
+                                                newProductRef.current?.focus()
+                                            }, 0)
+                                            }
+                                        }}
+                                        disabled={!editMode}
                                     />
                                 </div>
                             </div>
@@ -190,6 +213,7 @@ export default function NewOrderMenu() {
                                 placeholder={"Informations supplémentaires"}
                                 value={notes}
                                 onChange={(e) => setNotes(e.target.value)}
+                                disabled={!editMode}
                             />
                         </div>
                         <div className={styles.employeeSection}>
@@ -199,7 +223,26 @@ export default function NewOrderMenu() {
                                 placeholder={"Nom de l'employé"}
                                 value={employee}
                                 onChange={(e) => setEmployee(e.target.value)}
+                                disabled={!editMode}
                             />
+                        </div>
+                        <div className={styles.buttonsSection}>
+                            <button className={styles.cancelButton} onClick={handleCloseMenu}>Annuler</button>
+                            <button className={styles.saveButton} onClick={() => {
+                                    const orderObj = {
+                                        contactName:contactName,
+                                        companyName:companyName,
+                                        phoneNumber:phoneNumber,
+                                        email:email,
+                                        deliveringInfo:deliveringInfo,
+                                        orderProducts:orderProducts,
+                                        notes:notes,
+                                        employee:employee,
+                                        status:"waiting",
+                                        nbProducts:orderProducts.length
+                                    }
+                                    handleSave(orderObj)
+                                }}>Sauvegarder</button>
                         </div>
                     </div>
                 </div>
