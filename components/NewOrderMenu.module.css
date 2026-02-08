@@ -1,0 +1,404 @@
+/* =========================================================
+   THEME VARIABLES
+   ========================================================= */
+
+:root {
+  --primary: #633493;
+  --primary-hover: #502a75;
+  --primary-light: rgba(99, 52, 147, 0.08); /* Light decorative background */
+  
+  /* Backgrounds */
+  --modal-overlay: rgba(15, 23, 42, 0.6);
+  --modal-bg: #f8fafc;      /* Subtle Cool Grey/Blue tint */
+  --input-bg: #ffffff;      /* Pure white inputs */
+  
+  /* Borders & Dividers */
+  --border: #e2e8f0;
+  --divider: #cbd5e1;
+  
+  /* Text */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --label-color: #475569;
+  --placeholder: #94a3b8;
+  
+  /* Effects */
+  --radius-l: 24px;
+  --radius-m: 10px;
+  --shadow-input: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-modal: 0 25px 50px -12px rgba(60, 40, 90, 0.35); 
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --modal-bg: #111827;
+    --input-bg: #1f2937;
+    --border: #374151;
+    --divider: #374151;
+    --text-main: #f1f5f9;
+    --text-muted: #9ca3af;
+    --label-color: #cbd5e1;
+    --primary-light: rgba(99, 52, 147, 0.2);
+    --shadow-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* =========================================================
+   WRAPPER
+   ========================================================= */
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.darkBackground {
+  position: absolute;
+  inset: 0;
+  background: var(--modal-overlay);
+  backdrop-filter: blur(6px);
+}
+
+/* =========================================================
+   MAIN MODAL
+   ========================================================= */
+
+.mainContainer {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1300px;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background: var(--modal-bg);
+  color: var(--text-main);
+
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-modal);
+  
+  padding: 48px; 
+  
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* =========================================================
+   SECTIONS & HEADERS
+   ========================================================= */
+
+.customerSection,
+.orderSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Title Bar Styling */
+.customerSectionTitle,
+.orderSectionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes button to right */
+  
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--primary-light) 0%, transparent 95%);
+  padding: 10px 20px;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+}
+
+.customerSectionTitle h3,
+.orderSectionTitle h3 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: var(--primary);
+  letter-spacing: -0.01em;
+}
+
+.notesSection h4,
+.employeeSection h4 {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-main);
+}
+
+/* =========================================================
+   BUTTON (HEADER STYLE)
+   ========================================================= */
+
+/* Wrapper for button inside title */
+.sub1RightSection {
+  display: flex;
+  align-items: center;
+}
+
+.loadCustomer {
+  /* Compact Header Button */
+  height: 38px;
+  padding: 0 20px;
+  border-radius: 6px;
+  border: none;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(99, 52, 147, 0.2);
+}
+
+.loadCustomer:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(99, 52, 147, 0.3);
+}
+
+.loadCustomer:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   CUSTOMER INFO LAYOUT
+   ========================================================= */
+
+.customerInfoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 12px;
+}
+
+/* Wrapper for the 4-input grid */
+.customerInfoSubSection1 {
+  width: 100%;
+}
+
+.sub1LeftSection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns, equal width */
+  gap: 20px;
+  width: 100%;
+}
+
+/* =========================================================
+   INPUTS & TEXTAREAS
+   ========================================================= */
+
+.fieldAndTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.fieldAndTitle p {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+}
+
+/* Base styles for all inputs/textareas */
+.normalInput,
+.mediumInput,
+.largeInput,
+.productInput,
+.qtyInput {
+  width: 100%;
+  padding: 0 16px;
+  border-radius: var(--radius-m);
+  
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-input);
+  
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: inherit; /* Important for textareas */
+  transition: all 0.2s ease;
+}
+
+/* Input specific heights */
+.normalInput, .productInput, .qtyInput {
+  height: 52px;
+}
+
+/* Textarea specific styles */
+.largeInput,
+.mediumInput {
+  padding: 14px 16px;
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.mediumInput {
+  min-height: 120px;
+}
+
+.normalInput::placeholder,
+.mediumInput::placeholder,
+.largeInput::placeholder,
+.productInput::placeholder,
+.qtyInput::placeholder {
+  color: var(--placeholder);
+}
+
+.normalInput:hover,
+.mediumInput:hover,
+.largeInput:hover,
+.productInput:hover,
+.qtyInput:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.normalInput:focus,
+.mediumInput:focus,
+.largeInput:focus,
+.productInput:focus,
+.qtyInput:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--input-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 52, 147, 0.15);
+}
+
+/* =========================================================
+   ORDER SECTION
+   ========================================================= */
+
+.orderSection {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 48px;
+  padding: 0 12px;
+}
+
+.leftOrderSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.orderFieldsTitle {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--divider);
+  margin-bottom: 12px;
+}
+
+.orderFieldsTitle p {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orderFields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.productRow {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 16px;
+  align-items: center;
+}
+
+.qtyInput {
+  text-align: center;
+}
+
+.RightOrderSection {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: 40px; 
+  border-left: 1px dashed var(--divider);
+  padding-left: 48px;
+}
+
+.notesSection,
+.employeeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .orderSection {
+    grid-template-columns: 1fr;
+  }
+  
+  .RightOrderSection {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px dashed var(--divider);
+    padding-top: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContainer {
+    padding: 24px;
+  }
+  
+  .customerInfoSection,
+  .orderSection {
+    padding: 0;
+  }
+
+  .sub1LeftSection {
+    grid-template-columns: 1fr; /* Stack inputs vertically on mobile */
+  }
+
+  .productRow {
+    grid-template-columns: 1fr 90px;
+  }
+  
+  .orderFieldsTitle {
+     grid-template-columns: 1fr 90px;
+  }
+  
+  .customerSectionTitle {
+    padding: 10px 14px;
+  }
+  
+  .customerSectionTitle h3 {
+    font-size: 1.2rem;
+  }
+}
