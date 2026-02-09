@@ -409,3 +409,85 @@
     padding: 0.5rem 0.75rem;
   }
 }
+
+/* Add these styles to your StatusComponent.module.css */
+
+.waitingOrdersContainer,
+.readyOrdersContainer,
+.deliveredOrdersContainer {
+    min-height: 200px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+/* Drop zone highlighting */
+.waitingOrdersContainer[data-droppable-id]:hover,
+.readyOrdersContainer[data-droppable-id]:hover,
+.deliveredOrdersContainer[data-droppable-id]:hover {
+    background-color: rgba(99, 52, 147, 0.05);
+}
+
+/* Drag overlay styling */
+.dragOverlay {
+    cursor: grabbing;
+    opacity: 0.9;
+    box-shadow: 0 8px 16px rgba(99, 52, 147, 0.3);
+    border: 2px solid #633493;
+    border-radius: 8px;
+}
+
+/* Add these styles to your StatusComponent.module.css */
+
+.waitingOrdersContainer,
+.readyOrdersContainer,
+.deliveredOrdersContainer {
+    min-height: 200px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+/* Drop zone highlighting when dragging over */
+.dropActive {
+    background-color: rgba(99, 52, 147, 0.1);
+    border: 2px dashed #633493;
+}
+
+/* Drag overlay styling */
+.dragOverlay {
+    cursor: grabbing;
+    opacity: 0.9;
+    box-shadow: 0 8px 16px rgba(99, 52, 147, 0.3);
+    border: 2px solid #633493;
+    border-radius: 8px;
+}
+
+/* Add these styles to your StatusComponent.module.css */
+
+.waitingOrdersContainer,
+.readyOrdersContainer,
+.deliveredOrdersContainer {
+    min-height: 400px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, border 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Drop zone highlighting when dragging over */
+.dropActive {
+    background-color: rgba(99, 52, 147, 0.1);
+    border: 2px dashed #633493 !important;
+}
+
+/* Drag overlay styling */
+.dragOverlay {
+    cursor: grabbing;
+    opacity: 0.9;
+    box-shadow: 0 8px 16px rgba(99, 52, 147, 0.3);
+    border: 2px solid #633493;
+    border-radius: 8px;
+}

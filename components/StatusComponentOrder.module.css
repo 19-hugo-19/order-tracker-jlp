@@ -96,3 +96,25 @@
     font-size: 0.8125rem;
   }
 }
+
+/* Add these styles to your StatusComponentOrder.module.css */
+
+.mainContainer {
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mainContainer:active {
+    cursor: grabbing;
+}
+
+.mainContainer.dragging {
+    opacity: 0.5;
+    box-shadow: 0 4px 8px rgba(99, 52, 147, 0.2);
+}
+
+.mainContainer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 52, 147, 0.15);
+}

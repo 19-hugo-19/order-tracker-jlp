@@ -60,10 +60,22 @@ export default function DashboardPage() {
         toggleEmptyNewOrderMenu()
     }
 
+    const handleStatusChange = async (orderId, newStatus) => {
+        const user = auth.currentUser
+        if (!user){
+            return
+        }
+        await updateComOrder(user.uid, orderId, { status: newStatus })
+    }
+
     return (
         <div className={styles.dashboardPage}>
             <AlertComponent/>
-            <StatusComponent handleOpenNewOrderMenu={toggleEmptyNewOrderMenu} handleOrderClick={openOrder}/>
+            <StatusComponent
+                handleOpenNewOrderMenu={toggleEmptyNewOrderMenu}
+                handleOrderClick={openOrder}
+                handleStatusChange={handleStatusChange}
+                />
             {newOderMenuVisible ? <NewOrderMenu
                 handleCloseMenu={toggleEmptyNewOrderMenu}
                 handleSave={addOrder}
