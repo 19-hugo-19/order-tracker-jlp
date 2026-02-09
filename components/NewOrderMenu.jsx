@@ -1,15 +1,16 @@
 'use client'
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "./NewOrderMenu.module.css"
 
-export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, startingOrderObj }) {
+export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, handleSaveOnEdit, menuMode, startingOrderObj }) {
 
     const [contactName, setContactName] = useState(startingOrderObj.contactName)
     const [companyName, setCompanyName] = useState(startingOrderObj.companyName)
     const [phoneNumber, setPhoneNumber] = useState(startingOrderObj.phoneNumber)
     const [email, setEmail] = useState(startingOrderObj.email)
     const [deliveringInfo, setDeliveringInfo] = useState(startingOrderObj.deliveringInfo)
+    const [mode, setMode] = useState(menuMode)
 
     // orderProducts obj layout
     // orderProducts = [
@@ -42,6 +43,24 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
 
     }
 
+    useEffect(() => {
+        function handleKeyDown(e) {
+        if (e.key === "Escape") {
+            handleCloseMenu()
+        }
+        }
+
+        document.addEventListener("keydown", handleKeyDown)
+
+        return () => {
+        document.removeEventListener("keydown", handleKeyDown)
+        }
+    }, [handleCloseMenu])
+
+    useEffect(() => {
+        setMode(menuMode)
+    }, [menuMode])
+
     return (
         <div className={styles.menu}>
             <div className={styles.darkBackground} onClick={handleCloseMenu}/>
@@ -65,7 +84,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                         placeholder={"Nom"}
                                         value={contactName}
                                         onChange={(e) => setContactName(e.target.value)}
-                                        disabled={!editMode}
+                                        disabled={mode==="see"}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -75,7 +94,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                         placeholder={"Compagnie"}
                                         value={companyName}
                                         onChange={(e) => setCompanyName(e.target.value)}
-                                        disabled={!editMode}
+                                        disabled={mode==="see"}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -85,7 +104,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                         placeholder={"Téléphone"}
                                         value={phoneNumber}
                                         onChange={(e) => setPhoneNumber(e.target.value)}
-                                        disabled={!editMode}
+                                        disabled={mode==="see"}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -95,7 +114,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                         placeholder={"Email"}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        disabled={!editMode}
+                                        disabled={mode==="see"}
                                     />
                                 </div>
                             </div>
@@ -108,7 +127,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                     placeholder={"Informations de livraison"}
                                     value={deliveringInfo}
                                     onChange={(e) => setDeliveringInfo(e.target.value)}
-                                    disabled={!editMode}
+                                    disabled={mode==="see"}
                                 />
                             </div>
                         </div>
@@ -140,7 +159,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                                     }
                                                     setOrderProducts(newOrder)
                                                 }}
-                                                disabled={!editMode}
+                                                disabled={mode==="see"}
                                             />
                                             <input
                                                 className={styles.qtyInput}
@@ -154,7 +173,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                                     }
                                                     setOrderProducts(newOrder)
                                                 }}
-                                                disabled={!editMode}
+                                                disabled={mode==="see"}
                                             />
                                         </div>
                                     )
@@ -172,7 +191,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                                 productName:e.target.value
                                             })
                                         }}
-                                        disabled={!editMode}
+                                        disabled={mode==="see"}
                                     />
                                     <input
                                         className={styles.qtyInput}
@@ -193,13 +212,17 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                             setOrderProducts(prev => [...prev, tempProduct])
                                             setTempProduct(defaultTempProduct)
 
-                                            // Wait for React to render the new row
                                             setTimeout(() => {
                                                 newProductRef.current?.focus()
                                             }, 0)
                                             }
                                         }}
-                                        disabled={!editMode}
+                                        onBlur={() => {
+                                            if (!tempProduct.productName) return
+                                            setOrderProducts(prev => [...prev, tempProduct])
+                                            setTempProduct(defaultTempProduct)
+                                        }}
+                                        disabled={mode==="see"}
                                     />
                                 </div>
                             </div>
@@ -213,7 +236,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                 placeholder={"Informations supplémentaires"}
                                 value={notes}
                                 onChange={(e) => setNotes(e.target.value)}
-                                disabled={!editMode}
+                                disabled={mode==="see"}
                             />
                         </div>
                         <div className={styles.employeeSection}>
@@ -223,11 +246,13 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                 placeholder={"Nom de l'employé"}
                                 value={employee}
                                 onChange={(e) => setEmployee(e.target.value)}
-                                disabled={!editMode}
+                                disabled={mode==="see"}
                             />
                         </div>
                         <div className={styles.buttonsSection}>
-                            <button className={styles.cancelButton} onClick={handleCloseMenu}>Annuler</button>
+                            <button className={styles.cancelButton} onClick={handleCloseMenu}>
+                                {mode !== "see" ? "Annuler" : "Fermer"}
+                            </button>
                             <button className={styles.saveButton} onClick={() => {
                                     const orderObj = {
                                         contactName:contactName,
@@ -239,10 +264,36 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, editMode, st
                                         notes:notes,
                                         employee:employee,
                                         status:"waiting",
-                                        nbProducts:orderProducts.length
+                                        nbProducts:orderProducts.length,
+                                        id:startingOrderObj.id
                                     }
-                                    handleSave(orderObj)
-                                }}>Sauvegarder</button>
+                                    const newOrderObj = {
+                                        contactName:contactName,
+                                        companyName:companyName,
+                                        phoneNumber:phoneNumber,
+                                        email:email,
+                                        deliveringInfo:deliveringInfo,
+                                        orderProducts:orderProducts,
+                                        notes:notes,
+                                        employee:employee,
+                                        status:"waiting",
+                                        nbProducts:orderProducts.length,
+                                    }
+                                    switch (mode){
+                                        case "new":
+                                            handleSave(newOrderObj)
+                                            break
+                                        case "see":
+                                            handleEdit()
+                                            break
+                                        case "edit":
+                                            handleSaveOnEdit(orderObj)
+                                            break
+                                        default:
+                                            handleSave(orderObj)
+                                            break
+                                    }
+                                }}>{mode !== "see" ? "Sauvegarder" : "Modifier"}</button>
                         </div>
                     </div>
                 </div>

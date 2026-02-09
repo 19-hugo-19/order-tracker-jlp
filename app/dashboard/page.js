@@ -5,7 +5,7 @@ import styles from "./page.module.css"
 import StatusComponent from "@/components/StatusComponent"
 import { useState } from "react"
 import NewOrderMenu from "@/components/NewOrderMenu"
-import { newComOrder } from "@/lib/comOrder"
+import { newComOrder, updateComOrder } from "@/lib/comOrder"
 import { auth } from "@/lib/firebase"
 
 export default function DashboardPage() {
@@ -23,8 +23,10 @@ export default function DashboardPage() {
 
     const [newOderMenuVisible, setNewOrderMenuVisible] = useState(false)
     const [orderObjInUse, setOrderObjInUse] = useState(emptyOrderObj)
+    const [newOrderMenuMode, setNewOrderMenuMode] = useState("new") // Modes: "new": new order, "see": see order, "edit": edit order
 
     const toggleEmptyNewOrderMenu = () => {
+        setNewOrderMenuMode("new")
         setOrderObjInUse(emptyOrderObj)
         setNewOrderMenuVisible(!newOderMenuVisible)
     }
@@ -39,8 +41,23 @@ export default function DashboardPage() {
     }
 
     const openOrder = (orderObj) => {
+        setNewOrderMenuMode("see")
         setOrderObjInUse(orderObj)
         setNewOrderMenuVisible(true)
+    }
+
+    const openEditMode = () => {
+        setNewOrderMenuMode("edit")
+    }
+
+    const updateOrder = async (orderObj) => {
+        const user = auth.currentUser
+        if (!user){
+            return
+        }
+        const { id, creationDate, ...updateFields } = orderObj
+        await updateComOrder(user.uid, orderObj.id, updateFields)
+        toggleEmptyNewOrderMenu()
     }
 
     return (
@@ -50,7 +67,10 @@ export default function DashboardPage() {
             {newOderMenuVisible ? <NewOrderMenu
                 handleCloseMenu={toggleEmptyNewOrderMenu}
                 handleSave={addOrder}
+                handleEdit={openEditMode}
+                handleSaveOnEdit={updateOrder}
                 startingOrderObj={orderObjInUse}
+                menuMode={newOrderMenuMode}
                 /> : <></>}
         </div>
     )

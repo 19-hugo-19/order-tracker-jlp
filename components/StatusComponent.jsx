@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import styles from "./StatusComponent.module.css"
 import StatusComponentOrder from "./StatusComponentOrder"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -16,11 +16,13 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
     const [deliveredOrders, setDeliveredOrders] = useState([])
     const [searchValue, setSearchValue] = useState("")
     
-    const filterOrders = (orders) => {
-        let tempWaiting = []
-        let tempReady = []
-        let tempDelivered = []
+    const filterOrders = useCallback((orders) => {
+        const tempWaiting = []
+        const tempReady = []
+        const tempDelivered = []
+        
         orders.forEach(order => {
+            
             switch(order.status){
                 case "waiting":
                     tempWaiting.push(order)
@@ -35,35 +37,27 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
                     tempWaiting.push(order)
                     break
             }
-        });
+        })
+        
         setWaitingOrders(tempWaiting)
         setReadyOrders(tempReady)
         setDeliveredOrders(tempDelivered)
-    }
+    }, [])
 
     useEffect(() => {
-    let unsubscribeOrders = null
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            if (unsubscribeOrders) {
-                unsubscribeOrders()
-                unsubscribeOrders = null
-            }
-            return
-        }
+        let unsubscribeOrders
 
-        if (unsubscribeOrders) unsubscribeOrders()
+        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+            if (!user) return
 
-        unsubscribeOrders = listenToComOrders(user.uid, (orders) => {
-        filterOrders(orders)
+            unsubscribeOrders = listenToComOrders(user.uid, filterOrders)
         })
-    })
 
-    return () => {
-        unsubscribeAuth()
-        if (unsubscribeOrders) unsubscribeOrders()
-    }
-    }, [])
+        return () => {
+            unsubscribeAuth()
+            if (unsubscribeOrders) unsubscribeOrders()
+        }
+    }, [filterOrders])
 
     return(
         <div className={styles.mainContainer}>
@@ -94,7 +88,11 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
                         {
                         waitingOrders.map((order, ind) => {
                             return (
-                                <StatusComponentOrder key={order.id} orderObj={order} handleClick={handleOrderClick}/>
+                                <StatusComponentOrder
+                                key={order.lastModified ? `${order.id}-${order.lastModified.seconds}` : order.id}
+                                orderObj={order}
+                                handleClick={handleOrderClick}
+                                />
                             )
                         })
                         }
@@ -108,7 +106,11 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
                         {
                         readyOrders.map((order, ind) => {
                             return (
-                                <StatusComponentOrder key={order.id} orderObj={order} handleClick={handleOrderClick}/>
+                                <StatusComponentOrder
+                                key={order.lastModified ? `${order.id}-${order.lastModified.seconds}` : order.id}
+                                orderObj={order}
+                                handleClick={handleOrderClick}
+                                />
                             )
                         })
                         }
@@ -122,7 +124,11 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
                         {
                         deliveredOrders.map((order, ind) => {
                             return (
-                                <StatusComponentOrder key={order.id} orderObj={order} handleClick={handleOrderClick}/>
+                                <StatusComponentOrder
+                                key={order.lastModified ? `${order.id}-${order.lastModified.seconds}` : order.id}
+                                orderObj={order}
+                                handleClick={handleOrderClick}
+                                />
                             )
                         })
                         }
