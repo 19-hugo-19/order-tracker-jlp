@@ -19,6 +19,7 @@ export default function DashboardPage() {
         orderProducts:[],
         notes:"",
         employee:"",
+        status:"waiting"
     }
 
     const [newOderMenuVisible, setNewOrderMenuVisible] = useState(false)
@@ -62,15 +63,23 @@ export default function DashboardPage() {
 
     const handleStatusChange = async (orderId, newStatus) => {
         const user = auth.currentUser
-        if (!user){
+        if (!user) {
+            console.error("No authenticated user")
             return
         }
-        await updateComOrder(user.uid, orderId, { status: newStatus })
+        
+        try {
+            await updateComOrder(user.uid, orderId, { status: newStatus })
+        } catch (error) {
+            console.error("Failed to update order status:", error)
+            // The Firebase listener in StatusComponent will automatically 
+            // revert the UI to the correct state if the update fails
+        }
     }
 
     return (
         <div className={styles.dashboardPage}>
-            <AlertComponent/>
+            <AlertComponent handleSeeOrder={openOrder}/>
             <StatusComponent
                 handleOpenNewOrderMenu={toggleEmptyNewOrderMenu}
                 handleOrderClick={openOrder}

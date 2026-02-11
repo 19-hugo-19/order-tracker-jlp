@@ -36,6 +36,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
     const [orderProducts, setOrderProducts] = useState(startingOrderObj.orderProducts)
     const [notes, setNotes] = useState(startingOrderObj.notes)
     const [employee, setEmployee] = useState(startingOrderObj.employee)
+    const [status, setStatus] = useState(startingOrderObj.status)
 
     const newProductRef = useRef(null)
 
@@ -263,7 +264,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                         orderProducts:orderProducts,
                                         notes:notes,
                                         employee:employee,
-                                        status:"waiting",
+                                        status:status,
                                         nbProducts:orderProducts.length,
                                         id:startingOrderObj.id
                                     }
@@ -276,7 +277,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                         orderProducts:orderProducts,
                                         notes:notes,
                                         employee:employee,
-                                        status:"waiting",
+                                        status:status,
                                         nbProducts:orderProducts.length,
                                     }
                                     switch (mode){
@@ -290,7 +291,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                             handleSaveOnEdit(orderObj)
                                             break
                                         default:
-                                            handleSave(orderObj)
+                                            handleSave(newOrderObj)
                                             break
                                     }
                                 }}>{mode !== "see" ? "Sauvegarder" : "Modifier"}</button>

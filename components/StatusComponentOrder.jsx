@@ -1,12 +1,19 @@
 'use client'
 
-import { useState } from "react"
 import styles from "./StatusComponentOrder.module.css"
 import { useDraggable } from '@dnd-kit/core'
 
 export default function StatusComponentOrder({ orderObj, handleClick }) {
-    const [order, setOrder] = useState(orderObj)
-    const creationDate = order.creationDate ? order.creationDate.toDate().toLocaleDateString() : "—"
+    // Handle creationDate that might be null (serverTimestamp hasn't resolved yet)
+    let creationDate = "En cours..."
+    if (orderObj.creationDate) {
+        try {
+            creationDate = orderObj.creationDate.toDate().toLocaleDateString()
+        } catch (error) {
+            // If toDate() fails, creationDate might still be a serverTimestamp placeholder
+            creationDate = "En cours..."
+        }
+    }
 
     const {
         attributes,
@@ -14,24 +21,24 @@ export default function StatusComponentOrder({ orderObj, handleClick }) {
         setNodeRef,
         transform,
         isDragging,
-    } = useDraggable({ id: order.id })
+    } = useDraggable({ id: orderObj.id })
 
     const style = transform ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        opacity: isDragging ? 0.5 : 1,
+        //opacity: isDragging ? 0.5 : 1,
     } : undefined
 
     return(
         <div 
             ref={setNodeRef}
-            style={style}
+            style={{...style, opacity: isDragging ? 0 : 1}}
             {...attributes}
             {...listeners}
             className={`${styles.mainContainer} ${isDragging ? styles.dragging : ''}`}
-            onClick={() => {handleClick(order)}}
+            onClick={() => {handleClick(orderObj)}}
         >
-            <p>{order.companyName}</p>
-            <p>{order.nbProducts} produits</p>
+            <p>{orderObj.companyName}</p>
+            <p>{orderObj.nbProducts} produits</p>
             <p>{creationDate}</p>
         </div>
     )
