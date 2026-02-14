@@ -101,6 +101,18 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
         return false
     }
 
+    function getLastMonday() {
+        const now = new Date();
+        const dayOfWeek = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+        const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // If Sunday, go back 6 days, else go back to Monday
+        
+        const lastMonday = new Date(now);
+        lastMonday.setDate(now.getDate() - daysToSubtract); // Go back to last week's Monday
+        lastMonday.setHours(0, 0, 0, 0); // Set to start of day
+        
+        return lastMonday;
+    }
+
     // Filter + Split by status
     useEffect(() => {
         const filtered = allOrders.filter(order =>
@@ -120,7 +132,11 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
                     tempReady.push(order)
                     break
                 case "delivered":
-                    tempDelivered.push(order)
+                    const lastMonday = getLastMonday()
+                    const orderDate = order.lastModified.toDate();
+                    if (orderDate >= lastMonday) {
+                        tempDelivered.push(order)
+                    }
                     break
                 default:
                     tempWaiting.push(order)
@@ -247,7 +263,7 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
                     {/* Delivered */}
                     <div className={styles.deliveredContainer}>
                         <div className={`${styles.headerDelivered} ${styles.header}`}>
-                            <h4>Livrées</h4>
+                            <h4>Livrées cette semaine</h4>
                         </div>
 
                         <DroppableContainer id="delivered-zone" className={styles.deliveredOrdersContainer}>
