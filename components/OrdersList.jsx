@@ -5,11 +5,11 @@ import styles from "./OrdersList.module.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons"
 
-export default function OrdersList({ orders = [], columns = [], onRowClick }) {
+export default function OrdersList({ orders = [], columns = [], onRowClick, defaultSortingDirection = "asc" }) {
 
     const [sortConfig, setSortConfig] = useState({
         key: columns[0].key,
-        direction: "asc"
+        direction: defaultSortingDirection
     })
 
     const handleSort = (key) => {
@@ -87,7 +87,7 @@ export default function OrdersList({ orders = [], columns = [], onRowClick }) {
                                         {col.label}
                                         {sortConfig.key === col.key && (
                                             <FontAwesomeIcon
-                                                icon={sortConfig.direction === "asc" ? faArrowUp : faArrowDown}
+                                                icon={sortConfig.direction === "desc" ? faArrowUp : faArrowDown}
                                                 className={styles.sortIcon}
                                             />
                                         )}

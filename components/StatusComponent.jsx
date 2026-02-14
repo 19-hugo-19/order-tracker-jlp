@@ -133,7 +133,9 @@ export default function StatusComponent({ handleOpenNewOrderMenu, handleOrderCli
                     break
                 case "delivered":
                     const lastMonday = getLastMonday()
-                    const orderDate = order.lastModified.toDate();
+                    let orderDate = new Date();
+                    if (order.lastModified?.toDate())
+                        orderDate = order.lastModified.toDate();
                     if (orderDate >= lastMonday) {
                         tempDelivered.push(order)
                     }

@@ -305,3 +305,53 @@
     display: block !important;
   }
 }
+
+/* ---------- CURRENT PAGE / ACTIVE LINK ---------- */
+.currentPage {
+  background: var(--sidebar-active) !important;
+  color: var(--primary-purple) !important;
+  font-weight: 600 !important;
+  border-left-color: var(--primary-purple) !important;
+}
+
+.currentPage svg {
+  color: var(--primary-purple) !important;
+}
+
+/* Add a subtle glow effect for current page (optional enhancement) */
+.sidebarContainer:not(:has(svg[data-icon="angles-right"])) .currentPage {
+  box-shadow: inset 3px 0 0 var(--primary-purple);
+}
+
+/* Ensure current page styling persists on hover */
+.currentPage:hover {
+  background: var(--sidebar-active) !important;
+  color: var(--primary-purple) !important;
+}
+
+.currentPage:hover svg {
+  color: var(--primary-purple) !important;
+}
+
+/* ---------- DARK MODE CURRENT PAGE ---------- */
+@media (prefers-color-scheme: dark) {
+  .currentPage {
+    background: var(--sidebar-active) !important;
+    box-shadow: inset 3px 0 0 var(--primary-purple);
+  }
+}
+
+/* ---------- MOBILE CURRENT PAGE ---------- */
+@media (max-width: 900px) {
+  .currentPage {
+    background: var(--sidebar-active) !important;
+    color: var(--primary-purple) !important;
+    font-weight: 600 !important;
+    border-left-color: var(--primary-purple) !important;
+  }
+  
+  /* Ensure the border is visible on mobile */
+  .sectionLinks .currentPage {
+    border-left: 3px solid var(--primary-purple) !important;
+  }
+}

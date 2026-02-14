@@ -69,11 +69,6 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                 <div className={styles.customerSection}>
                     <div className={styles.customerSectionTitle}>
                         <h3>Infos Clients</h3>
-                        <div className={styles.sub1RightSection}>
-                            <button className={styles.loadCustomer} onClick={handleLoadCustomer}>
-                                Charger client
-                            </button>
-                        </div>
                     </div>
                     <div className={styles.customerInfoSection}>
                         <div className={styles.customerInfoSubSection1}>
@@ -250,6 +245,19 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                 disabled={mode==="see"}
                             />
                         </div>
+                        <div className={styles.statusSection}>
+                            <h4>Statut</h4>
+                            <select
+                                className={styles.normalInput}
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                                disabled={mode==="see"}
+                            >
+                                <option value="waiting">En attente</option>
+                                <option value="ready">Prête à livrer</option>
+                                <option value="delivered">Livrée</option>
+                            </select>
+                        </div>
                         <div className={styles.buttonsSection}>
                             <button className={styles.cancelButton} onClick={handleCloseMenu}>
                                 {mode !== "see" ? "Annuler" : "Fermer"}
@@ -278,7 +286,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                         notes:notes,
                                         employee:employee,
                                         status:status,
-                                        nbProducts:orderProducts.length,
+                                        nbProducts:orderProducts.length
                                     }
                                     switch (mode){
                                         case "new":
