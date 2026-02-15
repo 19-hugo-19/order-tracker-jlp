@@ -95,7 +95,7 @@ export default function Home() {
           <div className={styles.featureCard}>
             <div className={styles.featureIcon}>🔔</div>
             <h3>Alertes intelligentes</h3>
-            <p>Soyez avertis lorsqu'une commandes est en retard dans les délais</p>
+            <p>Soyez avertis lorsqu'une commandes est en retard selon les délais prévus</p>
           </div>
           <div className={styles.featureCard}>
             <div className={styles.featureIcon}>📈</div>
