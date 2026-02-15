@@ -7,8 +7,12 @@ import { deleteIndOrder, listenToIndOrders, newIndOrder, updateIndOrder } from "
 import { auth } from "@/lib/firebase"
 import OrdersList from "@/components/OrdersList"
 import { onAuthStateChanged } from "firebase/auth"
+import { useRouter } from "next/navigation"
 
 export default function StationaryPage() {
+
+    const router = useRouter()
+    const [isLoading, setIsLoading] = useState(true)
     
     const emptyOrderObj = {
         customerName: "",
@@ -35,7 +39,14 @@ export default function StationaryPage() {
         let unsubscribeOrders
 
         const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-            if (!user) return
+            if (!user) {
+                // User is not logged in, redirect to login
+                router.push('/login')
+                return
+            }
+
+            // User is logged in
+            setIsLoading(false)
 
             unsubscribeOrders = listenToIndOrders(
                 user.uid,
@@ -47,7 +58,7 @@ export default function StationaryPage() {
             unsubscribeAuth()
             if (unsubscribeOrders) unsubscribeOrders()
         }
-    }, [handleOrdersSnapshot])
+    }, [handleOrdersSnapshot, router])
 
     const openNewOrderMenu = () => {
         setMenuMode("new")
@@ -103,6 +114,31 @@ export default function StationaryPage() {
     }
 
     const activeOrders = orders.filter(order => order.type === "stationary")
+
+    useEffect(() => {
+        let unsubscribeOrders
+
+        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // User is not logged in, redirect to login
+                router.push('/login')
+                return
+            }
+
+            // User is logged in
+            setIsLoading(false)
+
+            unsubscribeOrders = listenToIndOrders(
+                user.uid,
+                handleOrdersSnapshot
+            )
+        })
+
+        return () => {
+            unsubscribeAuth()
+            if (unsubscribeOrders) unsubscribeOrders()
+        }
+    }, [handleOrdersSnapshot, router])
 
     return (
         <div className={styles.page}>

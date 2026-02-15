@@ -9,8 +9,12 @@ import { newComOrder, updateComOrder } from "@/lib/comOrder"
 import { auth } from "@/lib/firebase"
 import { onAuthStateChanged } from "firebase/auth"
 import { deleteOldArchivedOrders } from "@/lib/ArchiveCleanup"
+import { useRouter } from "next/navigation"
 
 export default function DashboardPage() {
+
+    const router = useRouter()
+    const [isLoading, setIsLoading] = useState(true)
 
     const emptyOrderObj = {
         contactName:"",
@@ -31,22 +35,28 @@ export default function DashboardPage() {
     // Run cleanup in background when dashboard loads
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    // Run cleanup silently in the background
-                    const result = await deleteOldArchivedOrders(user.uid)
-                    if (result.deleted > 0) {
-                        console.log(`Background cleanup: ${result.deleted} old orders deleted`)
-                    }
-                } catch (error) {
-                    // Fail silently - don't interrupt user experience
-                    console.error("Background cleanup error:", error)
+            if (!user) {
+                // User is not logged in, redirect to login
+                router.push('/login')
+                return
+            }
+            
+            // User is logged in
+            setIsLoading(false)
+            
+            try {
+                // Run cleanup silently in the background
+                const result = await deleteOldArchivedOrders(user.uid)
+                if (result.deleted > 0) {
+                    console.log(`Background cleanup: ${result.deleted} old orders deleted`)
                 }
+            } catch (error) {
+                console.error("Background cleanup error:", error)
             }
         })
 
         return () => unsubscribe()
-    }, [])
+    }, [router])
 
     const toggleEmptyNewOrderMenu = () => {
         setNewOrderMenuMode("new")
@@ -117,6 +127,21 @@ export default function DashboardPage() {
             console.error("Error branching order:", error)
             alert("Erreur lors de la séparation de la commande")
         }
+    }
+
+    // Show loading state while checking auth
+    if (isLoading) {
+        return (
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '100vh',
+                color: '#633493'
+            }}>
+                Chargement...
+            </div>
+        )
     }
 
     return (

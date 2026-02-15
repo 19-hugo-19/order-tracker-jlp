@@ -7,8 +7,12 @@ import styles from "./page.module.css"
 import { auth } from "@/lib/firebase"
 import { listenToComOrders, newComOrder, updateComOrder } from "@/lib/comOrder"
 import { onAuthStateChanged } from "firebase/auth"
+import { useRouter } from "next/navigation"
 
 export default function OrdersPage() {
+
+    const router = useRouter()
+    const [isLoading, setIsLoading] = useState(true)
 
     const emptyOrderObj = {
         contactName: "",
@@ -37,7 +41,14 @@ export default function OrdersPage() {
         let unsubscribeOrders
 
         const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-            if (!user) return
+            if (!user) {
+                // User is not logged in, redirect to login
+                router.push('/login')
+                return
+            }
+
+            // User is logged in
+            setIsLoading(false)
 
             unsubscribeOrders = listenToComOrders(
                 user.uid,
@@ -49,7 +60,7 @@ export default function OrdersPage() {
             unsubscribeAuth()
             if (unsubscribeOrders) unsubscribeOrders()
         }
-    }, [handleOrdersSnapshot])
+    }, [handleOrdersSnapshot, router])
 
     // ----- Handlers -----
     const toggleNewOrderMenu = () => {
@@ -111,6 +122,21 @@ export default function OrdersPage() {
 
     // ----- Filter active orders -----
     const activeOrders = orders.filter(order => order.status === "delivered")
+
+        // Show loading state while checking auth
+    if (isLoading) {
+        return (
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '100vh',
+                color: '#633493'
+            }}>
+                Chargement...
+            </div>
+        )
+    }
 
     // ----- Render -----
     return (
