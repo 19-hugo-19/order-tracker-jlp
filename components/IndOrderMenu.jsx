@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react"
 import styles from "./IndOrderMenu.module.css"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons"
 
-export default function IndOrderMenu({ menuMode, handleCloseMenu, handleSaveOrder, handleSetEditMode, handleSaveEditedOrder, defaultOrder }) {
+export default function IndOrderMenu({ menuMode, handleCloseMenu, handleSaveOrder, handleSetEditMode, handleSaveEditedOrder, defaultOrder, handleDeleteOrder }) {
 
     const [customerName, setCustomerName] = useState(defaultOrder.customerName)
     const [phone, setPhone] = useState(defaultOrder.phone)
@@ -12,14 +14,21 @@ export default function IndOrderMenu({ menuMode, handleCloseMenu, handleSaveOrde
     const [notes, setNotes] = useState(defaultOrder.notes)
     const [employee, setEmployee] = useState(defaultOrder.employee)
     const [id, setId] = useState(defaultOrder.id)
-    const [type, setType] = useState(defaultOrder.type) // either "papeterie" or "jeux"
+    const [type, setType] = useState(defaultOrder.type) // either "stationary" or "games"
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [supplier, setSupplier] = useState("")
 
     const [mode, setMode] = useState(menuMode)
 
     useEffect(() => {
         function handleKeyDown(e) {
             if (e.key === "Escape"){
-                handleCloseMenu()
+                if(deleteModalOpen){
+                    setDeleteModalOpen(false)
+                }
+                else{
+                    handleCloseMenu()
+                }
             }
         }
 
@@ -29,7 +38,7 @@ export default function IndOrderMenu({ menuMode, handleCloseMenu, handleSaveOrde
             document.removeEventListener("keydown", handleKeyDown)
         }
 
-    }, [handleCloseMenu])
+    }, [handleCloseMenu, deleteModalOpen])
 
     useEffect(() => {
         setMode(menuMode)
@@ -83,14 +92,36 @@ export default function IndOrderMenu({ menuMode, handleCloseMenu, handleSaveOrde
                     </div>
                     <div className={styles.sectionInputs}>
                         <div className={styles.productSection}>
-                            <h4>{"Produit (nom et numéro si applicable)"}</h4>
-                            <input
-                                className={styles.longInput}
-                                placeholder={"Produit"}
-                                value={product}
-                                onChange={(e) => {setProduct(e.target.value)}}
-                                disabled={mode === "see"}
-                            />
+                            <div className={styles.productSectionProduct}>
+                                <h4>
+                                    {"Produit (nom et numéro si applicable)"}
+                                    <abbr
+                                        className={styles.infoIcon}
+                                        title={type === "games" ? "Indiquer le nom du jeux ou du puzzle ainsi que le code de produit si applicable" :
+                                            "Indiquer le code de produit Hamster et une description du produit"
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faCircleInfo}/>
+                                    </abbr>
+                                </h4>
+                                <input
+                                    className={styles.longInput}
+                                    placeholder={"Produit"}
+                                    value={product}
+                                    onChange={(e) => {setProduct(e.target.value)}}
+                                    disabled={mode === "see"}
+                                />
+                            </div>
+                            <div className={styles.productSectionSupplier}>
+                                <h4>Fournisseur</h4>
+                                <input
+                                    className={styles.standardInput}
+                                    placeholder={"Fournisseur"}
+                                    value={supplier}
+                                    onChange={(e) => {setSupplier(e.target.value)}}
+                                    disabled={mode === "see"}
+                                />
+                            </div>
                         </div>
                         <div className={styles.notesSection}>
                             <h4>Notes</h4>
@@ -114,6 +145,9 @@ export default function IndOrderMenu({ menuMode, handleCloseMenu, handleSaveOrde
                         </div>
                     </div>
                     <div className={styles.btnSection}>
+                        {(mode === "see" || mode === "edit") &&
+                        (<button className={styles.deleteButton} onClick={() => {setDeleteModalOpen(true)}}>Supprimer</button>)
+                        }
                         <button
                             className={styles.cancelButton}
                             onClick={handleCloseMenu}
@@ -128,7 +162,8 @@ export default function IndOrderMenu({ menuMode, handleCloseMenu, handleSaveOrde
                                 product: product,
                                 notes: notes,
                                 employee: employee,
-                                type: type
+                                type: type,
+                                supplier: supplier
                             }
                             if(id !== "")
                                 orderObj = {...orderObj, id:id}
@@ -148,6 +183,21 @@ export default function IndOrderMenu({ menuMode, handleCloseMenu, handleSaveOrde
                             }
                         }}
                         >{mode === "see" ? "Modifier" : "Sauvegarder"}</button>
+                    </div>
+                </div>
+            </div>
+            <div className={`${styles.deleteModal} ${deleteModalOpen ? styles.open : ''}`}>
+                <div className={styles.deleteModalBackground}/>
+                <div className={styles.deleteModalContainer}>
+                    <h3>Voulez-vous réellement supprimer cette commande ?</h3>
+                    <h4>{product} - {customerName}</h4>
+                    <div className={styles.deleteModalButtons}>
+                        <button onClick={() => {setDeleteModalOpen(false)}}>Annuler</button>
+                        <button onClick={() => {
+                            handleDeleteOrder(id)
+                            setDeleteModalOpen(false)
+                            handleCloseMenu()
+                            }}>Supprimer</button>
                     </div>
                 </div>
             </div>

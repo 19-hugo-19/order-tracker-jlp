@@ -108,7 +108,7 @@ export default function OrdersList({ orders = [], columns = [], onRowClick, defa
                             sortedOrders.map(order => (
                                 <tr key={order.id} className={styles.row} onClick={() => {onRowClick(order)}}>
                                     {columns.map(col => (
-                                        <td key={col.key} className={`${styles.cell} ${col.key === "companyName" ? styles.boldTableText : ""}`}>
+                                        <td key={col.key} className={`${styles.cell} ${col.key === "companyName" || col.key === "product" ? styles.boldTableText : ""}`}>
                                             {formatValue(order[col.key])}
                                         </td>
                                     ))}

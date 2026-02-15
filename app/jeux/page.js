@@ -8,7 +8,7 @@ import { auth } from "@/lib/firebase"
 import OrdersList from "@/components/OrdersList"
 import { onAuthStateChanged } from "firebase/auth"
 
-export default function StationaryPage() {
+export default function GamesPage() {
     
     const emptyOrderObj = {
         customerName: "",
@@ -18,7 +18,7 @@ export default function StationaryPage() {
         notes: "",
         employee: "",
         id: "",
-        type:"stationary",
+        type:"games",
         supplier: ""
     }
 
@@ -102,15 +102,15 @@ export default function StationaryPage() {
         await deleteIndOrder(user.uid, orderId)
     }
 
-    const activeOrders = orders.filter(order => order.type === "stationary")
+    const activeOrders = orders.filter(order => order.type === "games")
 
     return (
         <div className={styles.page}>
             <div className={styles.headerSection}>
                 <div>
-                    <h1 className={styles.title}>Commandes de papeterie</h1>
+                    <h1 className={styles.title}>Commandes de jeux et puzzles</h1>
                     <p className={styles.subtitle}>
-                        Liste des commandes de papeterie
+                        Liste des commandes de jeux et puzzles
                     </p>
                 </div>
 
@@ -131,6 +131,7 @@ export default function StationaryPage() {
                         { key: "customerName", label: "Nom" },
                         { key: "phone", label: "Téléphone" },
                         { key: "notes", label: "Notes"},
+                        { key: "supplier", label: "Fournisseur"},
                     ]}
                     onRowClick={handleRowClick}
                 />
