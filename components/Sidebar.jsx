@@ -43,8 +43,8 @@ export default function Sidebar() {
                     {isCollapsed ? <></> : <h3>Particuliers</h3>}
                 </div>
                 <div className={styles.sectionLinks}>
-                    <Link className={currentPage === "particulierspapeterie" ? styles.currentPage : ""} href="/particulierspapeterie">{isCollapsed ? <FontAwesomeIcon icon={faPaperclip}/> : "Papeterie"}</Link>
-                    <Link className={currentPage === "particuliersjeux" ? styles.currentPage : ""} href="/particuliersjeux">{isCollapsed ? <FontAwesomeIcon icon={faChess}/> : "Jeux & puzzles"}</Link>
+                    <Link className={currentPage === "papeterie" ? styles.currentPage : ""} href="/papeterie">{isCollapsed ? <FontAwesomeIcon icon={faPaperclip}/> : "Papeterie"}</Link>
+                    <Link className={currentPage === "jeux" ? styles.currentPage : ""} href="/jeux">{isCollapsed ? <FontAwesomeIcon icon={faChess}/> : "Jeux & puzzles"}</Link>
                 </div>
             </div>
             <div className={styles.settingsSection}>
