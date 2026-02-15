@@ -3,19 +3,29 @@ import { useEffect, useState } from "react"
 import styles from "./AlertComponent.module.css"
 import { auth } from "@/lib/firebase"
 import { listenToComOrders } from "@/lib/comOrder"
+import { getUserSettings, DEFAULT_SETTINGS } from "@/lib/settings"
 import { onAuthStateChanged } from "firebase/auth"
 
 export default function AlertComponent({ handleSeeOrder }) {
-    const [daysConsideredLate, setDaysConsideredLate] = useState(3)
+    const [daysConsideredLate, setDaysConsideredLate] = useState(DEFAULT_SETTINGS.daysUntilLate)
     const [lateOrders, setLateOrders] = useState([])
 
     useEffect(() => {
         let unsubscribeOrders
 
-        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+        const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 setLateOrders([])
                 return
+            }
+
+            // Load settings to get daysUntilLate
+            try {
+                const settings = await getUserSettings(user.uid)
+                setDaysConsideredLate(settings.daysUntilLate)
+            } catch (error) {
+                console.error("Error loading settings:", error)
+                // Keep default value if settings can't be loaded
             }
 
             // Listen to all orders and filter for late ones

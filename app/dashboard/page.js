@@ -3,10 +3,12 @@
 import AlertComponent from "@/components/AlertComponent"
 import styles from "./page.module.css"
 import StatusComponent from "@/components/StatusComponent"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import NewOrderMenu from "@/components/NewOrderMenu"
 import { newComOrder, updateComOrder } from "@/lib/comOrder"
 import { auth } from "@/lib/firebase"
+import { onAuthStateChanged } from "firebase/auth"
+import { deleteOldArchivedOrders } from "@/lib/ArchiveCleanup"
 
 export default function DashboardPage() {
 
@@ -25,6 +27,26 @@ export default function DashboardPage() {
     const [newOderMenuVisible, setNewOrderMenuVisible] = useState(false)
     const [orderObjInUse, setOrderObjInUse] = useState(emptyOrderObj)
     const [newOrderMenuMode, setNewOrderMenuMode] = useState("new") // Modes: "new": new order, "see": see order, "edit": edit order
+
+    // Run cleanup in background when dashboard loads
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    // Run cleanup silently in the background
+                    const result = await deleteOldArchivedOrders(user.uid)
+                    if (result.deleted > 0) {
+                        console.log(`Background cleanup: ${result.deleted} old orders deleted`)
+                    }
+                } catch (error) {
+                    // Fail silently - don't interrupt user experience
+                    console.error("Background cleanup error:", error)
+                }
+            }
+        })
+
+        return () => unsubscribe()
+    }, [])
 
     const toggleEmptyNewOrderMenu = () => {
         setNewOrderMenuMode("new")
