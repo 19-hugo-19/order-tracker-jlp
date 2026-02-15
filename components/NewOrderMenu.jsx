@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from "react"
 import styles from "./NewOrderMenu.module.css"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCodeBranch } from "@fortawesome/free-solid-svg-icons"
 
-export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, handleSaveOnEdit, menuMode, startingOrderObj }) {
+export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, handleSaveOnEdit, handleBranch, menuMode, startingOrderObj }) {
 
     const [contactName, setContactName] = useState(startingOrderObj.contactName)
     const [companyName, setCompanyName] = useState(startingOrderObj.companyName)
@@ -11,22 +13,6 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
     const [email, setEmail] = useState(startingOrderObj.email)
     const [deliveringInfo, setDeliveringInfo] = useState(startingOrderObj.deliveringInfo)
     const [mode, setMode] = useState(menuMode)
-
-    // orderProducts obj layout
-    // orderProducts = [
-    //     {
-    //         productName:"value"
-    //         qty:number
-    //     }
-    //     {
-    //         productName:"value"
-    //         qty:number
-    //     }
-    //     {
-    //         productName:"value"
-    //         qty:number
-    //     }
-    // ]
 
     const defaultTempProduct = {
         productName:"",
@@ -37,6 +23,10 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
     const [notes, setNotes] = useState(startingOrderObj.notes)
     const [employee, setEmployee] = useState(startingOrderObj.employee)
     const [status, setStatus] = useState(startingOrderObj.status)
+    
+    // Branching state
+    const [branchMode, setBranchMode] = useState(false)
+    const [selectedProducts, setSelectedProducts] = useState([])
 
     const newProductRef = useRef(null)
 
@@ -46,26 +36,93 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
 
     useEffect(() => {
         function handleKeyDown(e) {
-        if (e.key === "Escape") {
-            handleCloseMenu()
-        }
+            if (e.key === "Escape") {
+                if (branchMode) {
+                    setBranchMode(false)
+                    setSelectedProducts([])
+                } else {
+                    handleCloseMenu()
+                }
+            }
         }
 
         document.addEventListener("keydown", handleKeyDown)
 
         return () => {
-        document.removeEventListener("keydown", handleKeyDown)
+            document.removeEventListener("keydown", handleKeyDown)
         }
-    }, [handleCloseMenu])
+    }, [handleCloseMenu, branchMode])
 
     useEffect(() => {
         setMode(menuMode)
     }, [menuMode])
 
+    const toggleProductSelection = (index) => {
+        setSelectedProducts(prev => {
+            if (prev.includes(index)) {
+                return prev.filter(i => i !== index)
+            } else {
+                return [...prev, index]
+            }
+        })
+    }
+
+    const handleBranchSave = () => {
+        if (selectedProducts.length === 0) {
+            alert("Veuillez sélectionner au moins un produit à livrer")
+            return
+        }
+        
+        if (selectedProducts.length === orderProducts.length) {
+            alert("Vous ne pouvez pas livrer tous les produits. Utilisez la modification normale.")
+            return
+        }
+
+        // Create delivered order (branch 1)
+        const deliveredProducts = orderProducts.filter((_, index) => selectedProducts.includes(index))
+        const deliveredOrder = {
+            contactName,
+            companyName,
+            phoneNumber,
+            email,
+            deliveringInfo,
+            orderProducts: deliveredProducts,
+            notes,
+            employee,
+            status: "delivered",
+            nbProducts: deliveredProducts.length
+        }
+
+        // Create remaining order (branch 2)
+        const remainingProducts = orderProducts.filter((_, index) => !selectedProducts.includes(index))
+        const remainingOrder = {
+            contactName,
+            companyName,
+            phoneNumber,
+            email,
+            deliveringInfo,
+            orderProducts: remainingProducts,
+            notes,
+            employee,
+            status: status,
+            nbProducts: remainingProducts.length,
+            id: startingOrderObj.id
+        }
+
+        handleBranch(deliveredOrder, remainingOrder)
+    }
+
     return (
         <div className={styles.menu}>
             <div className={styles.darkBackground} onClick={handleCloseMenu}/>
             <div className={styles.mainContainer}>
+                {branchMode && (
+                    <div className={styles.branchBanner}>
+                        <FontAwesomeIcon icon={faCodeBranch} />
+                        <span>Mode séparation : Sélectionnez les produits livrés</span>
+                    </div>
+                )}
+                
                 <div className={styles.customerSection}>
                     <div className={styles.customerSectionTitle}>
                         <h3>Infos Clients</h3>
@@ -80,7 +137,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                         placeholder={"Nom"}
                                         value={contactName}
                                         onChange={(e) => setContactName(e.target.value)}
-                                        disabled={mode==="see"}
+                                        disabled={mode==="see" || branchMode}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -90,7 +147,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                         placeholder={"Compagnie"}
                                         value={companyName}
                                         onChange={(e) => setCompanyName(e.target.value)}
-                                        disabled={mode==="see"}
+                                        disabled={mode==="see" || branchMode}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -100,7 +157,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                         placeholder={"Téléphone"}
                                         value={phoneNumber}
                                         onChange={(e) => setPhoneNumber(e.target.value)}
-                                        disabled={mode==="see"}
+                                        disabled={mode==="see" || branchMode}
                                     />
                                 </div>
                                 <div className={styles.fieldAndTitle}>
@@ -110,7 +167,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                         placeholder={"Email"}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        disabled={mode==="see"}
+                                        disabled={mode==="see" || branchMode}
                                     />
                                 </div>
                             </div>
@@ -123,7 +180,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                     placeholder={"Informations de livraison"}
                                     value={deliveringInfo}
                                     onChange={(e) => setDeliveringInfo(e.target.value)}
-                                    disabled={mode==="see"}
+                                    disabled={mode==="see" || branchMode}
                                 />
                             </div>
                         </div>
@@ -133,16 +190,35 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                     <div className={styles.leftOrderSection}>
                         <div className={styles.orderSectionTitle}>
                             <h3>Commande</h3>
+                            {(mode === "see" || mode === "edit") && !branchMode && (
+                                <button 
+                                    className={styles.branchButton}
+                                    onClick={() => setBranchMode(true)}
+                                    title="Séparer la commande"
+                                >
+                                    <FontAwesomeIcon icon={faCodeBranch} />
+                                    <span>Séparer</span>
+                                </button>
+                            )}
                         </div>
                         <div className={styles.orderFieldsSection}>
-                            <div className={styles.orderFieldsTitle}>
+                            <div className={`${styles.orderFieldsTitle} ${branchMode ? styles.branchModeHeader : ''}`}>
+                                {branchMode && <p>Sélection</p>}
                                 <p>Produit</p>
                                 <p>Qté</p>
                             </div>
                             <div className={styles.orderFields}>
                                 {orderProducts.map((product, ind) => {
                                     return (
-                                        <div key={ind} className={styles.productRow}>
+                                        <div key={ind} className={`${styles.productRow} ${branchMode ? styles.branchModeRow : ''}`}>
+                                            {branchMode && (
+                                                <input
+                                                    type="checkbox"
+                                                    className={styles.productCheckbox}
+                                                    checked={selectedProducts.includes(ind)}
+                                                    onChange={() => toggleProductSelection(ind)}
+                                                />
+                                            )}
                                             <input
                                                 className={styles.productInput}
                                                 placeholder={"Nom et/ou numéro de produit"}
@@ -155,7 +231,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                                     }
                                                     setOrderProducts(newOrder)
                                                 }}
-                                                disabled={mode==="see"}
+                                                disabled={mode==="see" || branchMode}
                                             />
                                             <input
                                                 className={styles.qtyInput}
@@ -169,58 +245,60 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                                     }
                                                     setOrderProducts(newOrder)
                                                 }}
-                                                disabled={mode==="see"}
+                                                disabled={mode==="see" || branchMode}
                                             />
                                         </div>
                                     )
                                 })}
                                 {/* New line to add products */}
-                                <div className={styles.productRow}>
-                                    <input
-                                        ref={newProductRef}
-                                        className={styles.productInput}
-                                        placeholder={"Nom et/ou numéro de produit"}
-                                        value={tempProduct.productName}
-                                        onChange={(e) => {
-                                            setTempProduct({
-                                                ...tempProduct,
-                                                productName:e.target.value
-                                            })
-                                        }}
-                                        disabled={mode==="see"}
-                                    />
-                                    <input
-                                        className={styles.qtyInput}
-                                        placeholder={"Quantité"}
-                                        value={tempProduct.qty}
-                                        onChange={(e) => {
-                                            setTempProduct({
-                                                ...tempProduct,
-                                                qty:e.target.value
-                                            })
-                                        }}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Tab" || e.key === "Enter") {
-                                            e.preventDefault()
+                                {!branchMode && (
+                                    <div className={styles.productRow}>
+                                        <input
+                                            ref={newProductRef}
+                                            className={styles.productInput}
+                                            placeholder={"Nom et/ou numéro de produit"}
+                                            value={tempProduct.productName}
+                                            onChange={(e) => {
+                                                setTempProduct({
+                                                    ...tempProduct,
+                                                    productName:e.target.value
+                                                })
+                                            }}
+                                            disabled={mode==="see"}
+                                        />
+                                        <input
+                                            className={styles.qtyInput}
+                                            placeholder={"Quantité"}
+                                            value={tempProduct.qty}
+                                            onChange={(e) => {
+                                                setTempProduct({
+                                                    ...tempProduct,
+                                                    qty:e.target.value
+                                                })
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Tab" || e.key === "Enter") {
+                                                e.preventDefault()
 
-                                            if (!tempProduct.productName) return
+                                                if (!tempProduct.productName) return
 
-                                            setOrderProducts(prev => [...prev, tempProduct])
-                                            setTempProduct(defaultTempProduct)
+                                                setOrderProducts(prev => [...prev, tempProduct])
+                                                setTempProduct(defaultTempProduct)
 
-                                            setTimeout(() => {
-                                                newProductRef.current?.focus()
-                                            }, 0)
-                                            }
-                                        }}
-                                        onBlur={() => {
-                                            if (!tempProduct.productName) return
-                                            setOrderProducts(prev => [...prev, tempProduct])
-                                            setTempProduct(defaultTempProduct)
-                                        }}
-                                        disabled={mode==="see"}
-                                    />
-                                </div>
+                                                setTimeout(() => {
+                                                    newProductRef.current?.focus()
+                                                }, 0)
+                                                }
+                                            }}
+                                            onBlur={() => {
+                                                if (!tempProduct.productName) return
+                                                setOrderProducts(prev => [...prev, tempProduct])
+                                                setTempProduct(defaultTempProduct)
+                                            }}
+                                            disabled={mode==="see"}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -232,7 +310,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                 placeholder={"Informations supplémentaires"}
                                 value={notes}
                                 onChange={(e) => setNotes(e.target.value)}
-                                disabled={mode==="see"}
+                                disabled={mode==="see" || branchMode}
                             />
                         </div>
                         <div className={styles.employeeSection}>
@@ -242,7 +320,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                 placeholder={"Nom de l'employé"}
                                 value={employee}
                                 onChange={(e) => setEmployee(e.target.value)}
-                                disabled={mode==="see"}
+                                disabled={mode==="see" || branchMode}
                             />
                         </div>
                         <div className={styles.statusSection}>
@@ -251,7 +329,7 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                                 className={styles.normalInput}
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value)}
-                                disabled={mode==="see"}
+                                disabled={mode==="see" || branchMode}
                             >
                                 <option value="waiting">En attente</option>
                                 <option value="ready">Prête à livrer</option>
@@ -259,50 +337,72 @@ export default function NewOrderMenu({ handleCloseMenu, handleSave, handleEdit, 
                             </select>
                         </div>
                         <div className={styles.buttonsSection}>
-                            <button className={styles.cancelButton} onClick={handleCloseMenu}>
-                                {mode !== "see" ? "Annuler" : "Fermer"}
-                            </button>
-                            <button className={styles.saveButton} onClick={() => {
-                                    const orderObj = {
-                                        contactName:contactName,
-                                        companyName:companyName,
-                                        phoneNumber:phoneNumber,
-                                        email:email,
-                                        deliveringInfo:deliveringInfo,
-                                        orderProducts:orderProducts,
-                                        notes:notes,
-                                        employee:employee,
-                                        status:status,
-                                        nbProducts:orderProducts.length,
-                                        id:startingOrderObj.id
-                                    }
-                                    const newOrderObj = {
-                                        contactName:contactName,
-                                        companyName:companyName,
-                                        phoneNumber:phoneNumber,
-                                        email:email,
-                                        deliveringInfo:deliveringInfo,
-                                        orderProducts:orderProducts,
-                                        notes:notes,
-                                        employee:employee,
-                                        status:status,
-                                        nbProducts:orderProducts.length
-                                    }
-                                    switch (mode){
-                                        case "new":
-                                            handleSave(newOrderObj)
-                                            break
-                                        case "see":
-                                            handleEdit()
-                                            break
-                                        case "edit":
-                                            handleSaveOnEdit(orderObj)
-                                            break
-                                        default:
-                                            handleSave(newOrderObj)
-                                            break
-                                    }
-                                }}>{mode !== "see" ? "Sauvegarder" : "Modifier"}</button>
+                            {branchMode ? (
+                                <>
+                                    <button 
+                                        className={styles.cancelButton} 
+                                        onClick={() => {
+                                            setBranchMode(false)
+                                            setSelectedProducts([])
+                                        }}
+                                    >
+                                        Annuler
+                                    </button>
+                                    <button 
+                                        className={styles.saveButton} 
+                                        onClick={handleBranchSave}
+                                    >
+                                        Confirmer la séparation
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button className={styles.cancelButton} onClick={handleCloseMenu}>
+                                        {mode !== "see" ? "Annuler" : "Fermer"}
+                                    </button>
+                                    <button className={styles.saveButton} onClick={() => {
+                                            const orderObj = {
+                                                contactName:contactName,
+                                                companyName:companyName,
+                                                phoneNumber:phoneNumber,
+                                                email:email,
+                                                deliveringInfo:deliveringInfo,
+                                                orderProducts:orderProducts,
+                                                notes:notes,
+                                                employee:employee,
+                                                status:status,
+                                                nbProducts:orderProducts.length,
+                                                id:startingOrderObj.id
+                                            }
+                                            const newOrderObj = {
+                                                contactName:contactName,
+                                                companyName:companyName,
+                                                phoneNumber:phoneNumber,
+                                                email:email,
+                                                deliveringInfo:deliveringInfo,
+                                                orderProducts:orderProducts,
+                                                notes:notes,
+                                                employee:employee,
+                                                status:status,
+                                                nbProducts:orderProducts.length
+                                            }
+                                            switch (mode){
+                                                case "new":
+                                                    handleSave(newOrderObj)
+                                                    break
+                                                case "see":
+                                                    handleEdit()
+                                                    break
+                                                case "edit":
+                                                    handleSaveOnEdit(orderObj)
+                                                    break
+                                                default:
+                                                    handleSave(newOrderObj)
+                                                    break
+                                            }
+                                        }}>{mode !== "see" ? "Sauvegarder" : "Modifier"}</button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

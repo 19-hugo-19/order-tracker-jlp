@@ -77,6 +77,26 @@ export default function DashboardPage() {
         }
     }
 
+    const handleBranch = async (deliveredOrder, remainingOrder) => {
+        const user = auth.currentUser
+        if (!user) return
+
+        try {
+            // Create the delivered order as a new order
+            await newComOrder(user.uid, deliveredOrder)
+            
+            // Update the existing order with remaining products
+            const { id, creationDate, ...updateFields } = remainingOrder
+            await updateComOrder(user.uid, remainingOrder.id, updateFields)
+            
+            // Close the menu
+            toggleEmptyNewOrderMenu()
+        } catch (error) {
+            console.error("Error branching order:", error)
+            alert("Erreur lors de la séparation de la commande")
+        }
+    }
+
     return (
         <div className={styles.dashboardPage}>
             <AlertComponent handleSeeOrder={openOrder}/>
@@ -92,6 +112,7 @@ export default function DashboardPage() {
                 handleSaveOnEdit={updateOrder}
                 startingOrderObj={orderObjInUse}
                 menuMode={newOrderMenuMode}
+                handleBranch={handleBranch}
                 /> : <></>}
         </div>
     )

@@ -5,12 +5,12 @@
 :root {
   --primary: #633493;
   --primary-hover: #502a75;
-  --primary-light: rgba(99, 52, 147, 0.08); /* Light decorative background */
+  --primary-light: rgba(99, 52, 147, 0.08);
   
   /* Backgrounds */
   --modal-overlay: rgba(15, 23, 42, 0.6);
-  --modal-bg: #f8fafc;      /* Subtle Cool Grey/Blue tint */
-  --input-bg: #ffffff;      /* Pure white inputs */
+  --modal-bg: #f8fafc;
+  --input-bg: #ffffff;
   
   /* Borders & Dividers */
   --border: #e2e8f0;
@@ -104,12 +104,11 @@
   gap: 24px;
 }
 
-/* Title Bar Styling */
 .customerSectionTitle,
 .orderSectionTitle {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Pushes button to right */
+  justify-content: space-between;
   
   margin-bottom: 8px;
   background: linear-gradient(90deg, var(--primary-light) 0%, transparent 95%);
@@ -128,54 +127,12 @@
 }
 
 .notesSection h4,
-.employeeSection h4 {
+.employeeSection h4,
+.statusSection h4 {
   margin: 0 0 8px 0;
   font-weight: 600;
   font-size: 1rem;
   color: var(--text-main);
-}
-
-/* =========================================================
-   BUTTON (HEADER STYLE)
-   ========================================================= */
-
-/* Wrapper for button inside title */
-.sub1RightSection {
-  display: flex;
-  align-items: center;
-}
-
-.loadCustomer {
-  /* Compact Header Button */
-  height: 38px;
-  padding: 0 20px;
-  border-radius: 6px;
-  border: none;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-
-  background: var(--primary);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(99, 52, 147, 0.2);
-}
-
-.loadCustomer:hover {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(99, 52, 147, 0.3);
-}
-
-.loadCustomer:active {
-  transform: translateY(0);
 }
 
 /* =========================================================
@@ -189,14 +146,13 @@
   padding: 0 12px;
 }
 
-/* Wrapper for the 4-input grid */
 .customerInfoSubSection1 {
   width: 100%;
 }
 
 .sub1LeftSection {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columns, equal width */
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   width: 100%;
 }
@@ -222,7 +178,6 @@
   opacity: 0.9;
 }
 
-/* Base styles for all inputs/textareas */
 .normalInput,
 .mediumInput,
 .largeInput,
@@ -239,16 +194,14 @@
   color: var(--text-main);
   font-size: 0.95rem;
   font-weight: 500;
-  font-family: inherit; /* Important for textareas */
+  font-family: inherit;
   transition: all 0.2s ease;
 }
 
-/* Input specific heights */
 .normalInput, .productInput, .qtyInput {
   height: 52px;
 }
 
-/* Textarea specific styles */
 .largeInput,
 .mediumInput {
   padding: 14px 16px;
@@ -317,6 +270,10 @@
   margin-bottom: 12px;
 }
 
+.orderFieldsTitle.branchModeHeader {
+  grid-template-columns: 100px 1fr 120px;
+}
+
 .orderFieldsTitle p {
   margin: 0;
   font-size: 0.8rem;
@@ -339,6 +296,26 @@
   align-items: center;
 }
 
+.productRow.branchModeRow {
+  grid-template-columns: 100px 1fr 120px;
+  background: rgba(245, 158, 11, 0.05);
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.productRow.branchModeRow:hover {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.productCheckbox {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  accent-color: var(--primary);
+  justify-self: center;
+}
+
 .qtyInput {
   text-align: center;
 }
@@ -353,10 +330,189 @@
 }
 
 .notesSection,
-.employeeSection {
+.employeeSection,
+.statusSection {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.buttonsSection {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.cancelButton,
+.saveButton {
+  height: 46px;
+  padding: 0 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancelButton {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.cancelButton:hover {
+  background: rgba(100, 116, 139, 0.08);
+  color: var(--text-main);
+}
+
+.cancelButton:active {
+  transform: translateY(1px);
+}
+
+.saveButton {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(99, 52, 147, 0.35);
+}
+
+.saveButton:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(99, 52, 147, 0.45);
+}
+
+.saveButton:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(99, 52, 147, 0.35);
+}
+
+/* =========================================================
+   STATUS DROPDOWN
+   ========================================================= */
+
+.statusSection select.normalInput {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23633493' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
+  padding-right: 44px;
+  cursor: pointer;
+  font-weight: 550;
+}
+
+.statusSection select.normalInput:hover {
+  border-color: var(--primary);
+  background-color: var(--input-bg);
+}
+
+.statusSection select.normalInput:focus {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(99, 52, 147, 0.2);
+}
+
+.statusSection select.normalInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f1f5f9;
+}
+
+/* =========================================================
+   BRANCH MODE STYLING
+   ========================================================= */
+
+.branchBanner {
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  margin-bottom: -16px;
+}
+
+.branchBanner svg {
+  font-size: 1.2rem;
+}
+
+.branchButton {
+  height: 38px;
+  padding: 0 20px;
+  border-radius: 8px;
+  border: none;
+  
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+
+  background: #f59e0b;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+}
+
+.branchButton:hover {
+  background: #f97316;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.4);
+}
+
+.branchButton:active {
+  transform: translateY(0);
+}
+
+.branchButton svg {
+  font-size: 1rem;
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  .statusSection select.normalInput {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a78bfa' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  }
+  
+  .statusSection select.normalInput:disabled {
+    background-color: #1f2937;
+  }
+  
+  .branchBanner {
+    box-shadow: none;
+  }
+  
+  .branchButton {
+    box-shadow: none;
+  }
+  
+  .productRow.branchModeRow {
+    background: rgba(245, 158, 11, 0.1);
+  }
+  
+  .productRow.branchModeRow:hover {
+    background: rgba(245, 158, 11, 0.15);
+  }
 }
 
 /* =========================================================
@@ -387,15 +543,23 @@
   }
 
   .sub1LeftSection {
-    grid-template-columns: 1fr; /* Stack inputs vertically on mobile */
+    grid-template-columns: 1fr;
   }
 
   .productRow {
     grid-template-columns: 1fr 90px;
   }
   
+  .productRow.branchModeRow {
+    grid-template-columns: 80px 1fr 90px;
+  }
+  
   .orderFieldsTitle {
-     grid-template-columns: 1fr 90px;
+    grid-template-columns: 1fr 90px;
+  }
+  
+  .orderFieldsTitle.branchModeHeader {
+    grid-template-columns: 80px 1fr 90px;
   }
   
   .customerSectionTitle {
@@ -405,76 +569,7 @@
   .customerSectionTitle h3 {
     font-size: 1.2rem;
   }
-}
-/* =========================================================
-   ACTION BUTTONS
-   ========================================================= */
-
-.buttonsSection {
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-top: 24px;
-}
-
-/* Base button styles */
-.cancelButton,
-.saveButton {
-  height: 46px;
-  padding: 0 28px;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* -------------------------
-   CANCEL BUTTON
-   ------------------------- */
-
-.cancelButton {
-  background: transparent;
-  color: var(--text-muted);
-  border: 1px solid var(--border);
-}
-
-.cancelButton:hover {
-  background: rgba(100, 116, 139, 0.08);
-  color: var(--text-main);
-}
-
-.cancelButton:active {
-  transform: translateY(1px);
-}
-
-/* -------------------------
-   SAVE BUTTON (PRIMARY)
-   ------------------------- */
-
-.saveButton {
-  background: var(--primary);
-  color: #ffffff;
-  box-shadow: 0 6px 16px rgba(99, 52, 147, 0.35);
-}
-
-.saveButton:hover {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(99, 52, 147, 0.45);
-}
-
-.saveButton:active {
-  transform: translateY(0);
-  box-shadow: 0 6px 16px rgba(99, 52, 147, 0.35);
-}
-
-@media (max-width: 768px) {
+  
   .buttonsSection {
     flex-direction: column-reverse;
     gap: 12px;
@@ -484,93 +579,27 @@
   .saveButton {
     width: 100%;
   }
-}
-
-/* =========================================================
-   STATUS DROPDOWN
-   ========================================================= */
-
-.statusSection {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.statusSection h4 {
-  margin: 0 0 8px 0;
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--text-main);
-}
-
-/* Style the select element */
-.statusSection select.normalInput {
-  appearance: none; /* Remove default dropdown arrow */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23633493' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  background-size: 12px;
-  padding-right: 44px; /* Make room for custom arrow */
-  cursor: pointer;
-  font-weight: 550;
-}
-
-/* Hover state for select */
-.statusSection select.normalInput:hover {
-  border-color: var(--primary);
-  background-color: var(--input-bg);
-}
-
-/* Focus state for select */
-.statusSection select.normalInput:focus {
-  border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(99, 52, 147, 0.2);
-}
-
-/* Style individual options */
-.statusSection select.normalInput option {
-  padding: 12px 16px;
-  background: var(--input-bg);
-  color: var(--text-main);
-  font-weight: 550;
-  font-size: 0.95rem;
-}
-
-/* Option hover effect (limited browser support) */
-.statusSection select.normalInput option:hover {
-  background: var(--primary-light);
-  color: var(--primary);
-}
-
-/* Disabled state */
-.statusSection select.normalInput:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background-color: #f1f5f9;
-}
-
-/* =========================================================
-   DARK MODE ADJUSTMENTS
-   ========================================================= */
-
-@media (prefers-color-scheme: dark) {
-  /* Update arrow color for dark mode */
+  
   .statusSection select.normalInput {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a78bfa' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    height: 48px;
+    font-size: 1rem;
   }
   
-  .statusSection select.normalInput:disabled {
-    background-color: #1f2937;
+  .branchBanner {
+    padding: 12px 16px;
+    font-size: 0.85rem;
   }
-}
-
-/* =========================================================
-   MOBILE RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 768px) {
-  .statusSection select.normalInput {
-    height: 48px; /* Slightly taller for easier mobile tapping */
-    font-size: 1rem; /* Prevent zoom on iOS */
+  
+  .branchButton {
+    padding: 0 16px;
+    font-size: 0.8rem;
+  }
+  
+  .branchButton span {
+    display: none;
+  }
+  
+  .branchButton svg {
+    font-size: 1.1rem;
   }
 }

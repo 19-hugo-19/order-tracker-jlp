@@ -88,6 +88,27 @@ export default function OrdersPage() {
         setMenuMode("edit")
     }
 
+    const handleBranch = async (deliveredOrder, remainingOrder) => {
+        const user = auth.currentUser
+        if (!user) return
+
+        try {
+            // Create the delivered order as a new order
+            // Don't pass creationDate - let newComOrder add serverTimestamp()
+            await newComOrder(user.uid, deliveredOrder)
+            
+            // Update the existing order with remaining products
+            const { id, creationDate, ...updateFields } = remainingOrder
+            await updateComOrder(user.uid, remainingOrder.id, updateFields)
+            
+            // Close the menu
+            toggleNewOrderMenu()
+        } catch (error) {
+            console.error("Error branching order:", error)
+            alert("Erreur lors de la séparation de la commande")
+        }
+    }
+
     // ----- Filter active orders -----
     const activeOrders = orders.filter(order => order.status === "delivered")
 
@@ -133,6 +154,7 @@ export default function OrdersPage() {
                     handleEdit={handleEdit}
                     startingOrderObj={orderInUse}
                     menuMode={menuMode}
+                    handleBranch={handleBranch}
                 />
             )}
 
