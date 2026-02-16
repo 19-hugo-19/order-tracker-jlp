@@ -222,7 +222,31 @@
 
 .settingsSection a:hover svg {
   color: var(--primary-purple);
+}
+
+/* Gear icon rotates on hover */
+.settingsSection a:hover svg[data-icon="gear"] {
   transform: rotate(90deg);
+}
+
+/* House icon bounces on hover */
+.settingsSection a:hover svg[data-icon="house"] {
+  animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { 
+    transform: translateY(0); 
+  }
+  25% { 
+    transform: translateY(-4px); 
+  }
+  50% { 
+    transform: translateY(0); 
+  }
+  75% { 
+    transform: translateY(-2px); 
+  }
 }
 
 .settingsSection h4 {
