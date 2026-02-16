@@ -1,0 +1,83 @@
+/* NewOrderBtn.module.css */
+
+.mainContainer {
+  /* Layout */
+  display: flex;
+  align-items: center;       /* Vertically centers icon and text */
+  justify-content: center;
+  gap: 0.6rem;               /* Creates space between the icon and the h4 */
+  
+  /* Sizing */
+  width: fit-content;
+  min-width: 180px;          /* Slightly wider to accommodate the icon */
+  padding: 0.65rem 1.25rem;
+  
+  /* Visuals */
+  background-color: #633493;
+  color: #ffffff;            /* This ensures both text and icon are white */
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(99, 52, 147, 0.25);
+  border: 1px solid transparent;
+  
+  /* Interactivity */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+/* Style the FontAwesome Icon directly via the svg tag it generates */
+.mainContainer svg {
+  font-size: 1.1rem; /* Slightly larger than text for visual hierarchy */
+}
+
+/* Typography Reset for the h4 */
+.mainContainer h4 {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+/* Hover State */
+.mainContainer:hover {
+  background-color: #502a75; /* Darker purple */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(99, 52, 147, 0.35);
+}
+
+/* Active/Click State */
+.mainContainer:active {
+  background-color: #3e205c;
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(99, 52, 147, 0.2);
+}
+
+/* Focus State for Accessibility */
+.mainContainer:focus-visible {
+  outline: 2px solid #633493;
+  outline-offset: 2px;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .mainContainer {
+    width: 100%;       /* Full width on mobile */
+    margin-top: 0.5rem;
+    padding: 0.85rem;  /* Larger touch target */
+  }
+}
+
+/* --- Dark Mode Support --- */
+@media (prefers-color-scheme: dark) {
+  .mainContainer {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .mainContainer:hover {
+    background-color: #7a4bb0; /* Lighter on hover in dark mode for contrast */
+  }
+}

@@ -1,0 +1,548 @@
+/* ---------- VARIABLES ---------- */
+:root {
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e0e0e0;
+  --sidebar-text: #212121;
+  --sidebar-text-muted: #757575;
+  --sidebar-hover: #f5f5f5;
+  --sidebar-active: #f0ebf5;
+  --primary-purple: #633493;
+  --primary-purple-light: #7d4bad;
+  --section-spacing: 1.5rem;
+  --sidebar-width-expanded: 240px;
+  --sidebar-width-collapsed: 64px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sidebar-bg: #1e1e1e;
+    --sidebar-border: #3a3a3a;
+    --sidebar-text: #e8e8e8;
+    --sidebar-text-muted: #9e9e9e;
+    --sidebar-hover: #2a2a2a;
+    --sidebar-active: #2d2540;
+    --primary-purple: #8b5fc7;
+    --primary-purple-light: #9d74d4;
+  }
+}
+
+/* ---------- SIDEBAR CONTAINER ---------- */
+.sidebarContainer {
+  width: var(--sidebar-width-collapsed);
+  min-height: 100vh;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+  gap: var(--section-spacing);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+}
+
+.sidebarContainer:not(:has(svg[data-icon="angles-right"])) {
+  width: var(--sidebar-width-expanded);
+}
+
+/* ---------- TOP SECTION (TOGGLE BUTTON) ---------- */
+.topSection {
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.topSection svg {
+  width: 20px;
+  height: 20px;
+  padding: 0.625rem;
+  border-radius: 6px;
+  color: var(--sidebar-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.topSection svg:hover {
+  background: var(--sidebar-hover);
+  color: var(--primary-purple);
+}
+
+.topSection svg:active {
+  background: var(--sidebar-active);
+  transform: scale(0.95);
+}
+
+/* ---------- SECTION STYLES ---------- */
+.entreprisesSection,
+.particuliersSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+}
+
+/* ---------- SECTION TITLE ---------- */
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  color: var(--sidebar-text);
+  white-space: nowrap;
+}
+
+.sidebarContainer:not(:has(svg[data-icon="angles-right"])) .sectionTitle {
+  justify-content: flex-start;
+  padding-left: 1.75rem;
+}
+
+.sectionTitle svg {
+  width: 20px;
+  height: 20px;
+  color: var(--primary-purple);
+  flex-shrink: 0;
+}
+
+.sectionTitle h3 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sidebar-text);
+}
+
+/* ---------- SECTION LINKS ---------- */
+.sectionLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0;
+}
+
+.sectionLinks a {
+  padding: 0.75rem 1rem;
+  border-radius: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--sidebar-text-muted);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  letter-spacing: -0.01em;
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.sidebarContainer:not(:has(svg[data-icon="angles-right"])) .sectionLinks a {
+  justify-content: flex-start;
+  padding-left: 2.5rem;
+}
+
+.sectionLinks a svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--sidebar-text-muted);
+  transition: color 0.15s ease;
+}
+
+.sectionLinks a:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
+  border-left-color: var(--primary-purple);
+}
+
+.sectionLinks a:hover svg {
+  color: var(--primary-purple);
+}
+
+.sectionLinks a:active,
+.sectionLinks a[aria-current="page"] {
+  background: var(--sidebar-active);
+  color: var(--primary-purple);
+  font-weight: 600;
+  border-left-color: var(--primary-purple);
+}
+
+.sectionLinks a:active svg,
+.sectionLinks a[aria-current="page"] svg {
+  color: var(--primary-purple);
+}
+
+/* ---------- SETTINGS SECTION ---------- */
+.settingsSection {
+  margin-top: auto;
+  padding: 1.5rem 0 0 0;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.settingsSection a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--sidebar-text-muted);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.sidebarContainer:not(:has(svg[data-icon="angles-right"])) .settingsSection a {
+  justify-content: flex-start;
+  padding-left: 1.75rem;
+}
+
+.settingsSection a:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
+}
+
+.settingsSection svg {
+  width: 20px;
+  height: 20px;
+  color: var(--sidebar-text-muted);
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.settingsSection a:hover svg {
+  color: var(--primary-purple);
+}
+
+/* Gear icon rotates on hover */
+.settingsSection a:hover svg[data-icon="gear"] {
+  transform: rotate(90deg);
+}
+
+/* House icon bounces on hover */
+.settingsSection a:hover svg[data-icon="house"] {
+  animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { 
+    transform: translateY(0); 
+  }
+  25% { 
+    transform: translateY(-4px); 
+  }
+  50% { 
+    transform: translateY(0); 
+  }
+  75% { 
+    transform: translateY(-2px); 
+  }
+}
+
+.settingsSection h4 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+/* ---------- SCROLLBAR ---------- */
+.sidebarContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebarContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebarContainer::-webkit-scrollbar-thumb {
+  background: var(--sidebar-border);
+  border-radius: 3px;
+}
+
+.sidebarContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--sidebar-text-muted);
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 900px) {
+  .sidebarContainer {
+    width: 100% !important;
+    min-height: auto;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--sidebar-border);
+    padding: 1rem 0;
+    gap: 1.5rem;
+  }
+
+  .topSection {
+    display: none;
+  }
+
+  .sectionTitle {
+    justify-content: flex-start !important;
+    padding-left: 1rem !important;
+  }
+
+  .sectionTitle h3 {
+    font-size: 0.8125rem;
+  }
+
+  .sectionLinks {
+    padding: 0;
+  }
+
+  .sectionLinks a {
+    font-size: 0.875rem;
+    padding: 0.625rem 1rem !important;
+    justify-content: flex-start !important;
+    padding-left: 2.25rem !important;
+  }
+
+  .sectionLinks a svg {
+    display: none;
+  }
+
+  .settingsSection {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .settingsSection a {
+    justify-content: flex-start !important;
+    padding-left: 1rem !important;
+  }
+
+  .settingsSection h4 {
+    display: block !important;
+  }
+}
+
+/* ---------- CURRENT PAGE / ACTIVE LINK ---------- */
+.currentPage {
+  background: var(--sidebar-active) !important;
+  color: var(--primary-purple) !important;
+  font-weight: 600 !important;
+  border-left-color: var(--primary-purple) !important;
+}
+
+.currentPage svg {
+  color: var(--primary-purple) !important;
+}
+
+/* Add a subtle glow effect for current page (optional enhancement) */
+.sidebarContainer:not(:has(svg[data-icon="angles-right"])) .currentPage {
+  box-shadow: inset 3px 0 0 var(--primary-purple);
+}
+
+/* Ensure current page styling persists on hover */
+.currentPage:hover {
+  background: var(--sidebar-active) !important;
+  color: var(--primary-purple) !important;
+}
+
+.currentPage:hover svg {
+  color: var(--primary-purple) !important;
+}
+
+/* ---------- DARK MODE CURRENT PAGE ---------- */
+@media (prefers-color-scheme: dark) {
+  .currentPage {
+    background: var(--sidebar-active) !important;
+    box-shadow: inset 3px 0 0 var(--primary-purple);
+  }
+}
+
+/* ---------- MOBILE CURRENT PAGE ---------- */
+@media (max-width: 900px) {
+  .currentPage {
+    background: var(--sidebar-active) !important;
+    color: var(--primary-purple) !important;
+    font-weight: 600 !important;
+    border-left-color: var(--primary-purple) !important;
+  }
+  
+  /* Ensure the border is visible on mobile */
+  .sectionLinks .currentPage {
+    border-left: 3px solid var(--primary-purple) !important;
+  }
+}
+
+/* Add at the top with other variables */
+:root {
+  --z-mobile-menu: 1000;
+  --z-mobile-overlay: 999;
+  --z-mobile-button: 1001;
+}
+
+/* ---------- MOBILE MENU BUTTON ---------- */
+.mobileMenuButton {
+  display: none;
+}
+
+/* ---------- MOBILE OVERLAY ---------- */
+.mobileOverlay {
+  display: none;
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 900px) {
+  /* Mobile Menu Button */
+  .mobileMenuButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: var(--z-mobile-button);
+    width: 48px;
+    height: 48px;
+    background: var(--sidebar-bg);
+    border: 1px solid var(--sidebar-border);
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .mobileMenuButton:hover {
+    background: var(--sidebar-hover);
+  }
+
+  .mobileMenuButton:active {
+    transform: scale(0.95);
+  }
+
+  .mobileMenuButton svg {
+    width: 20px;
+    height: 20px;
+    color: var(--sidebar-text);
+  }
+
+  /* Mobile Overlay */
+  .mobileOverlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-mobile-overlay);
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Sidebar - Hidden by default on mobile */
+  .sidebarContainer {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px !important;
+    min-height: 100vh;
+    height: 100vh;
+    border-right: 1px solid var(--sidebar-border);
+    border-bottom: none;
+    padding: 1.5rem 0;
+    gap: 1.5rem;
+    z-index: var(--z-mobile-menu);
+    transition: left 0.3s ease;
+    overflow-y: auto;
+  }
+
+  /* Sidebar - Open state */
+  .sidebarContainer.mobileOpen {
+    left: 0;
+  }
+
+  /* Always show expanded view on mobile */
+  .sidebarContainer {
+    width: 280px !important;
+  }
+
+  .topSection {
+    display: none;
+  }
+
+  .sectionTitle {
+    justify-content: flex-start !important;
+    padding-left: 1.5rem !important;
+  }
+
+  .sectionTitle h3 {
+    font-size: 0.8125rem;
+    display: block !important;
+  }
+
+  .sectionLinks {
+    padding: 0;
+  }
+
+  .sectionLinks a {
+    font-size: 0.9375rem;
+    padding: 0.75rem 1.5rem !important;
+    justify-content: flex-start !important;
+    gap: 0.75rem;
+  }
+
+  .sectionLinks a svg {
+    display: block !important;
+    width: 18px;
+    height: 18px;
+  }
+
+  .sectionLinks a span {
+    display: inline;
+  }
+
+  .settingsSection {
+    margin-top: auto;
+    border-top: 1px solid var(--sidebar-border);
+    padding-top: 1.5rem;
+  }
+
+  .settingsSection a {
+    justify-content: flex-start !important;
+    padding-left: 1.5rem !important;
+  }
+
+  .settingsSection h4 {
+    display: block !important;
+  }
+
+  /* Current page styling */
+  .currentPage {
+    background: var(--sidebar-active) !important;
+    color: var(--primary-purple) !important;
+    font-weight: 600 !important;
+    border-left: 3px solid var(--primary-purple) !important;
+  }
+}
+
+/* Dark mode for mobile elements */
+@media (prefers-color-scheme: dark) and (max-width: 900px) {
+  .mobileMenuButton {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .mobileOverlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}

@@ -1,0 +1,198 @@
+/* ============================= */
+/* WRAPPER */
+/* ============================= */
+
+.wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* ============================= */
+/* TABLE CONTAINER */
+/* ============================= */
+
+.tableContainer {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* ============================= */
+/* TABLE */
+/* ============================= */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
+
+.table thead {
+    background: linear-gradient(
+        90deg,
+        #631da3 0%,
+        #7a2bc2 100%
+    );
+    color: white;
+}
+
+.headerCell {
+    padding: 16px 18px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease, opacity 0.2s ease;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* Softer hover — keep readable */
+.headerCell:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.sortIcon {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+/* ============================= */
+/* ROWS */
+/* ============================= */
+
+.row {
+    transition: background 0.15s ease;
+}
+
+.row:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.row:hover {
+    background-color: rgba(99, 29, 163, 0.06);
+    cursor: pointer;
+}
+
+/* ============================= */
+/* CELLS */
+/* ============================= */
+
+.cell {
+    padding: 16px 18px;
+    font-size: 14px;
+    color: #1b1b1b;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
+}
+
+/* Prevent overflow on long text */
+.cell {
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.boldTableText {
+    font-weight: 600;
+}
+
+/* ============================= */
+/* EMPTY STATE */
+/* ============================= */
+
+.empty {
+    padding: 32px;
+    text-align: center;
+    color: #777;
+    font-size: 14px;
+}
+
+/* ============================= */
+/* DARK MODE */
+/* ============================= */
+
+@media (prefers-color-scheme: dark) {
+
+    .tableContainer {
+        background: #1e1e1e;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: none;
+    }
+
+    .table thead {
+        background: linear-gradient(
+            90deg,
+            #631da3 0%,
+            #7a2bc2 100%
+        );
+    }
+
+    .headerCell:hover {
+        background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .row:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .row:hover {
+        background-color: rgba(99, 29, 163, 0.22);
+    }
+
+    .cell {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        color: #e5e5e5;
+    }
+
+    .empty {
+        color: #aaa;
+    }
+}
+
+/* ============================= */
+/* MOBILE RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 900px) {
+
+    .table {
+        min-width: 600px;
+    }
+
+    .headerCell,
+    .cell {
+        padding: 14px 14px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .table {
+        min-width: 500px;
+    }
+
+    .headerCell,
+    .cell {
+        padding: 12px;
+        font-size: 12px;
+    }
+}

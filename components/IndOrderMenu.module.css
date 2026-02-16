@@ -1,0 +1,681 @@
+/* =========================================================
+   THEME VARIABLES
+   ========================================================= */
+
+:root {
+  --primary: #633493;
+  --primary-hover: #502a75;
+  --primary-light: rgba(99, 52, 147, 0.08);
+  
+  /* Backgrounds */
+  --modal-overlay: rgba(15, 23, 42, 0.6);
+  --modal-bg: #f8fafc;
+  --input-bg: #ffffff;
+  
+  /* Borders & Dividers */
+  --border: #e2e8f0;
+  --divider: #cbd5e1;
+  
+  /* Text */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --label-color: #475569;
+  --placeholder: #94a3b8;
+  
+  /* Effects */
+  --radius-l: 24px;
+  --radius-m: 10px;
+  --shadow-input: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-modal: 0 25px 50px -12px rgba(60, 40, 90, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --modal-bg: #111827;
+    --input-bg: #1f2937;
+    --border: #374151;
+    --divider: #374151;
+    --text-main: #f1f5f9;
+    --text-muted: #9ca3af;
+    --label-color: #cbd5e1;
+    --primary-light: rgba(99, 52, 147, 0.2);
+    --shadow-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* =========================================================
+   MODAL WRAPPER
+   ========================================================= */
+
+.totalComponent {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  background: var(--modal-overlay);
+  backdrop-filter: blur(6px);
+}
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.mainContainer {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1200px;
+  max-height: 90vh;
+  overflow-y: auto;
+  
+  background: var(--modal-bg);
+  color: var(--text-main);
+  
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-modal);
+  
+  padding: 48px;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.customerSection,
+.orderSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--primary-light) 0%, transparent 95%);
+  padding: 10px 20px;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+}
+
+.sectionTitle h3 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: var(--primary);
+  letter-spacing: -0.01em;
+}
+
+/* =========================================================
+   SECTION INPUTS - HORIZONTAL LAYOUT
+   ========================================================= */
+
+.sectionInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 12px;
+}
+
+/* Customer Section - 3 columns */
+.customerSection .sectionInputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.nameSection,
+.phoneSection,
+.emailSection,
+.productSection,
+.notesSection,
+.employeeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.nameSection h4,
+.phoneSection h4,
+.emailSection h4,
+.productSection h4,
+.notesSection h4,
+.employeeSection h4 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+}
+
+/* Order Section - Full width product, notes, half-width employee */
+.orderSection .sectionInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.productSection {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* 75% / 25% split */
+  gap: 20px;
+  width: 100%;
+}
+
+.notesSection {
+  width: 100%;
+}
+
+.employeeSection {
+  width: 50%;
+}
+
+.productSectionProduct,
+.productSectionSupplier {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.productSectionProduct h4,
+.productSectionSupplier h4 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+}
+/* =========================================================
+   INPUTS & TEXTAREAS
+   ========================================================= */
+
+.standardInput,
+.longInput,
+.notesArea {
+  width: 100%;
+  padding: 0 16px;
+  border-radius: var(--radius-m);
+  
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-input);
+  
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.standardInput,
+.longInput {
+  height: 52px;
+}
+
+.notesArea {
+  padding: 14px 16px;
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+.standardInput::placeholder,
+.longInput::placeholder,
+.notesArea::placeholder {
+  color: var(--placeholder);
+}
+
+.standardInput:hover,
+.longInput:hover,
+.notesArea:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.standardInput:focus,
+.longInput:focus,
+.notesArea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--input-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 52, 147, 0.15);
+}
+
+.standardInput:disabled,
+.longInput:disabled,
+.notesArea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f1f5f9;
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  .standardInput:disabled,
+  .longInput:disabled,
+  .notesArea:disabled {
+    background-color: #1f2937;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .mainContainer {
+    max-width: 900px;
+  }
+  
+  .customerSection .sectionInputs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .emailSection {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContainer {
+    padding: 24px;
+  }
+  
+  .customerSection .sectionInputs {
+    grid-template-columns: 1fr;
+  }
+  
+  .emailSection {
+    grid-column: auto;
+  }
+  
+  .employeeSection {
+    width: 100%;
+  }
+  
+  .sectionInputs {
+    padding: 0;
+  }
+  
+  .sectionTitle {
+    padding: 10px 14px;
+  }
+  
+  .sectionTitle h3 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .totalComponent {
+    padding: 12px;
+  }
+
+  .mainContainer {
+    padding: 20px;
+    gap: 32px;
+    max-height: 95vh;
+  }
+  
+  .customerSection,
+  .orderSection {
+    gap: 20px;
+  }
+  
+  .orderSection .sectionInputs {
+    gap: 16px;
+  }
+  
+  .standardInput,
+  .longInput {
+    height: 48px;
+    font-size: 1rem;
+  }
+  
+  .notesArea {
+    min-height: 100px;
+  }
+}
+
+/* =========================================================
+   BUTTON SECTION
+   ========================================================= */
+
+.btnSection {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+  padding: 0 12px;
+}
+
+/* Base button styles */
+.cancelButton,
+.saveButton {
+  height: 46px;
+  padding: 0 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* -------------------------
+   CANCEL BUTTON
+   ------------------------- */
+
+.cancelButton {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.cancelButton:hover {
+  background: rgba(100, 116, 139, 0.08);
+  color: var(--text-main);
+}
+
+.cancelButton:active {
+  transform: translateY(1px);
+}
+
+/* -------------------------
+   SAVE BUTTON (PRIMARY)
+   ------------------------- */
+
+.saveButton {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(99, 52, 147, 0.35);
+}
+
+.saveButton:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(99, 52, 147, 0.45);
+}
+
+.saveButton:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(99, 52, 147, 0.35);
+}
+
+/* =========================================================
+   BUTTON RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .btnSection {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   DELETE BUTTON (LEFT ALIGNED)
+   ========================================================= */
+
+.btnSection {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 16px;
+  margin-top: 32px;
+  padding: 0 12px;
+}
+
+.deleteButton {
+  grid-column: 1;
+  height: 46px;
+  padding: 0 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.deleteButton:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+}
+
+.deleteButton:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.cancelButton {
+  grid-column: 3;
+}
+
+.saveButton {
+  grid-column: 4;
+}
+
+/* =========================================================
+   DELETE CONFIRMATION MODAL
+   ========================================================= */
+
+.deleteModal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000; /* Higher than main modal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.deleteModal.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.deleteModalBackground {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.deleteModalContainer {
+  position: relative;
+  z-index: 10;
+  background: var(--modal-bg);
+  color: var(--text-main);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  padding: 32px;
+  max-width: 500px;
+  width: 100%;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.deleteModalContainer h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+
+.deleteModalContainer h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 12px 16px;
+  background: var(--primary-light);
+  border-radius: 8px;
+}
+
+/* Add a wrapper div for buttons */
+.deleteModalButtons {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.deleteModalContainer button {
+  height: 46px;
+  padding: 0 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* Makes buttons equal width */
+}
+
+.deleteModalContainer button:first-of-type {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.deleteModalContainer button:first-of-type:hover {
+  background: rgba(100, 116, 139, 0.08);
+  color: var(--text-main);
+}
+
+.deleteModalContainer button:last-of-type {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.deleteModalContainer button:last-of-type:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+}
+
+.deleteModalContainer button:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   DARK MODE - DELETE ELEMENTS
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  .deleteButton {
+    box-shadow: none;
+  }
+  
+  .deleteModalContainer button:last-of-type {
+    box-shadow: none;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - DELETE ELEMENTS
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .btnSection {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  
+  .deleteButton {
+    grid-column: 1;
+    grid-row: 3;
+    width: 100%;
+  }
+  
+  .cancelButton {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  
+  .saveButton {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  
+  .deleteModalContainer {
+    padding: 24px;
+    max-width: 90%;
+  }
+  
+  .deleteModalContainer h3 {
+    font-size: 1.1rem;
+  }
+}
+
+.infoIcon {
+  margin-left: 6px;
+  cursor: help;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.infoIcon:hover {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .productSection {
+    grid-template-columns: 1fr; /* Stack vertically on mobile */
+    gap: 16px;
+  }
+}
