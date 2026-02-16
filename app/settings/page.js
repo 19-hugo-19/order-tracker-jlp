@@ -191,7 +191,7 @@ export default function SettingsPage(){
                 </div>
             </div>
             <p className={styles.devContact}>
-              En cas de problème, pour communiquer avec le développeur :{" "}
+              En cas de problème, communiquer avec le développeur :{" "}
               <a href="mailto:hugopelletier9@gmail.com">
                 hugopelletier9@gmail.com
               </a>
