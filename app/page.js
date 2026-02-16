@@ -41,7 +41,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <nav className={styles.nav}>
-        <div className={styles.logo}>Suivi commandes - JLP</div>
+        <div className={styles.logo}>Suivi de commandes - JLP</div>
         <div className={styles.navButtons}>
           {user ? (
             <button onClick={handleLogout} className={styles.logoutBtn}>
