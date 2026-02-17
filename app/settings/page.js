@@ -190,6 +190,13 @@ export default function SettingsPage(){
                     </button>
                 </div>
             </div>
+            <br/>
+            <p className={styles.devContact}>
+              En cas de problème, communiquer avec le développeur :{" "}
+              <a href="mailto:hugopelletier9@gmail.com">
+                hugopelletier9@gmail.com
+              </a>
+            </p>
         </div>
     )
 }

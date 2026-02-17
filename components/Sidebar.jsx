@@ -12,7 +12,7 @@ export default function Sidebar() {
     const pathname = usePathname()
     const currentPage = pathname.split("/")[1]
 
-    const [isCollapsed, setIsCollapsed] = useState(true)
+    const [isCollapsed, setIsCollapsed] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
 

@@ -1,4 +1,28 @@
 /* =========================================================
+   DEVELOPER CONTACT FOOTER
+   ========================================================= */
+
+.devContact {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.devContact a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.devContact a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+
+/* =========================================================
    THEME VARIABLES
    ========================================================= */
 
