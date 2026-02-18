@@ -141,4 +141,8 @@ export default function Sidebar() {
             </div>
         </>
     )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> company/main
