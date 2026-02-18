@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react"
 import styles from "./OrdersList.module.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons"
+import { faArrowUp, faArrowDown, faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons"
 
 export default function OrdersList({ orders = [], columns = [], onRowClick, defaultSortingDirection = "asc" }) {
 
@@ -11,6 +11,8 @@ export default function OrdersList({ orders = [], columns = [], onRowClick, defa
         key: columns[0].key,
         direction: defaultSortingDirection
     })
+
+    const [searchQuery, setSearchQuery] = useState("")
 
     const handleSort = (key) => {
         setSortConfig(prev => {
@@ -24,14 +26,54 @@ export default function OrdersList({ orders = [], columns = [], onRowClick, defa
         })
     }
 
-    const sortedOrders = useMemo(() => {
-        if (!sortConfig.key) return orders
+    const matchesQuery = (value, query) => {
+        if (value === null || value === undefined) return false
 
-        return [...orders].sort((a, b) => {
+        // Firestore timestamp
+        if (value?.toDate) {
+            return value.toDate().toLocaleDateString().toLowerCase().includes(query)
+        }
+
+        // Array — recurse into each element
+        if (Array.isArray(value)) {
+            return value.some(item => matchesQuery(item, query))
+        }
+
+        // Plain object — recurse into each field
+        if (typeof value === "object") {
+            return Object.values(value).some(v => matchesQuery(v, query))
+        }
+
+        if (typeof value === "boolean") {
+            return (value ? "oui" : "non").includes(query)
+        }
+
+        let normalized = String(value).toLowerCase()
+
+        // Translate status slugs so searching "livrée" etc. works
+        if (normalized === "waiting") normalized = "en attente"
+        else if (normalized === "ready") normalized = "prête"
+        else if (normalized === "delivered") normalized = "livrée"
+
+        return normalized.includes(query)
+    }
+
+    const filteredOrders = useMemo(() => {
+        const query = searchQuery.trim().toLowerCase()
+        if (!query) return orders
+
+        return orders.filter(order =>
+            Object.values(order).some(value => matchesQuery(value, query))
+        )
+    }, [orders, searchQuery])
+
+    const sortedOrders = useMemo(() => {
+        if (!sortConfig.key) return filteredOrders
+
+        return [...filteredOrders].sort((a, b) => {
             let aValue = a[sortConfig.key]
             let bValue = b[sortConfig.key]
 
-            // Handle Firestore timestamps
             if (aValue?.toDate) aValue = aValue.toDate()
             if (bValue?.toDate) bValue = bValue.toDate()
 
@@ -48,7 +90,7 @@ export default function OrdersList({ orders = [], columns = [], onRowClick, defa
             return 0
         })
 
-    }, [orders, sortConfig])
+    }, [filteredOrders, sortConfig])
 
     const formatValue = (value) => {
         if (!value) return "-"
@@ -73,6 +115,24 @@ export default function OrdersList({ orders = [], columns = [], onRowClick, defa
 
     return (
         <div className={styles.wrapper}>
+            <div className={styles.searchBarWrapper}>
+                <div className={styles.searchBar}>
+                    <FontAwesomeIcon icon={faMagnifyingGlass} className={styles.searchIcon} />
+                    <input
+                        type="text"
+                        className={styles.searchInput}
+                        placeholder="Rechercher une commande…"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                    />
+                    {searchQuery && (
+                        <button className={styles.clearButton} onClick={() => setSearchQuery("")} aria-label="Effacer">
+                            <FontAwesomeIcon icon={faXmark} />
+                        </button>
+                    )}
+                </div>
+            </div>
+
             <div className={styles.tableContainer}>
                 <table className={styles.table}>
                     <thead>
@@ -106,7 +166,7 @@ export default function OrdersList({ orders = [], columns = [], onRowClick, defa
                             </tr>
                         ) : (
                             sortedOrders.map(order => (
-                                <tr key={order.id} className={styles.row} onClick={() => {onRowClick(order)}}>
+                                <tr key={order.id} className={styles.row} onClick={() => { onRowClick(order) }}>
                                     {columns.map(col => (
                                         <td key={col.key} className={`${styles.cell} ${col.key === "companyName" || col.key === "product" ? styles.boldTableText : ""}`}>
                                             {formatValue(order[col.key])}
