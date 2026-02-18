@@ -6,15 +6,22 @@ import { faAnglesLeft, faAnglesRight, faBars, faBoxArchive, faBuildingUser, faCh
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 export default function Sidebar() {
-
+    
+    const nbEasterEggHovering = 13
     const pathname = usePathname()
     const currentPage = pathname.split("/")[1]
 
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
+    const [nbHoverGear, setNbHoverGear] = useState(0)
+
+    useEffect(() => { // Easter Egg handling
+        setNbHoverGear(0)
+    }, [currentPage])
 
     useEffect(() => {
         const checkMobile = () => {
@@ -133,8 +140,19 @@ export default function Sidebar() {
                         <FontAwesomeIcon icon={faHouse}/>
                         {!isCollapsed && <h4>Page d'accueil</h4>}
                     </Link>
-                    <Link href="/settings" onClick={closeMobileMenu}>
-                        <FontAwesomeIcon icon={faGear}/>
+                    <Link href="/settings" onClick={closeMobileMenu} onMouseEnter={() => {setNbHoverGear(nbHoverGear + 1)}}>
+                        {((nbHoverGear < nbEasterEggHovering || currentPage !== "settings") && (
+                            <FontAwesomeIcon icon={faGear}/>
+                        ))}
+                        {((nbHoverGear >= nbEasterEggHovering && currentPage === "settings") && (
+                            <Image 
+                                src="/tondeuse-manuelle.png" 
+                                alt="Easter Egg trouvé !!!" 
+                                className={styles.easterEggImage}
+                                width={30}
+                                height={30}
+                            />
+                        ))}
                         {!isCollapsed && <h4>Paramètres</h4>}
                     </Link>
                 </div>
